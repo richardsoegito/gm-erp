@@ -21,7 +21,7 @@
             <!-- BEGIN NAVBAR MENU -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                <a class="nav-link" href="./">
+                <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="./">
                     <span class="nav-link-icon d-md-none d-lg-inline-block"
                     ><!-- Download SVG icon from http://tabler.io/icons/icon/home -->
                     <svg
@@ -66,7 +66,6 @@
                                 <path d="M12 3c-4.97 0 -9 1.79 -9 4s4.03 4 9 4s9 -1.79 9 -4s-4.03 -4 -9 -4" />
                                 <path d="M3 7v10c0 2.21 4.03 4 9 4s9 -1.79 9 -4v-10" />
                                 <path d="M3 12c0 2.21 4.03 4 9 4s9 -1.79 9 -4" />
-
                             </svg>
                         </span>
                         <span class="nav-link-title"> Master </span>
