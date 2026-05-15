@@ -53,17 +53,22 @@ html {
     scroll-behavior: smooth;
 }
 
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
 body {
 
     background: var(--bg);
     color: var(--text);
 
-    font-family: Inter, sans-serif;
-
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
 
     overflow-x: hidden;
+
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 /* =========================================================
@@ -110,8 +115,12 @@ body {
 ========================================================= */
 
 .container {
-    max-width: 1320px;
+    /* max-width: 1320px; */
     padding-bottom: 50px;
+}
+
+.content {
+    padding: 20px;
 }
 
 /* =========================================================
@@ -123,6 +132,8 @@ body {
     position: sticky;
     top: 0;
     height: 80px;
+    width: 100%;
+    padding: 0px 10px;
 
     z-index: 999;
 
@@ -295,70 +306,17 @@ body {
 }
 
 /* =========================================================
-   STATS
-========================================================= */
-
-.hero-stats {
-
-    display: flex;
-
-    justify-content: center;
-    gap: 22px;
-
-    margin-top: 50px;
-
-    flex-wrap: wrap;
-}
-
-.stat-item {
-
-    min-width: 180px;
-
-    padding: 24px;
-
-    border-radius: var(--radius-md);
-
-    background: rgba(255,255,255,.55);
-
-    border: 1px solid var(--border);
-
-    backdrop-filter: blur(20px);
-
-    box-shadow: var(--shadow-sm);
-}
-
-[data-bs-theme="dark"] .stat-item {
-
-    background: rgba(15,23,42,.65);
-}
-
-.stat-item h3 {
-
-    margin: 0;
-
-    font-size: 34px;
-    font-weight: 800;
-}
-
-.stat-item p {
-
-    margin-top: 6px;
-
-    color: var(--muted);
-}
-
-/* =========================================================
    FILTER
 ========================================================= */
 
 .filter-section {
     margin-top: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
 }
 
 .filter-card {
 
-    padding: 24px;
+    padding: 16px;
 
     background: var(--card);
 
@@ -439,6 +397,8 @@ body {
 
     border-radius: 18px;
 
+    padding: 10px;
+
     background: linear-gradient(
         135deg,
         #2563eb,
@@ -457,6 +417,80 @@ body {
     transform: translateY(-2px);
 
     box-shadow: var(--shadow-md);
+}
+
+
+/* =========================================================
+   SELECT / FORM SELECT GLOBAL STYLE
+========================================================= */
+
+select,
+.form-select {
+
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+
+    background-image: none !important;
+
+    background-color: var(--card);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    height: 58px;
+
+    padding: 0 44px 0 16px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    outline: none;
+
+    transition: .25s ease;
+
+    /* custom arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+
+    box-shadow: var(--shadow-sm);
+}
+
+/* focus state */
+select:focus,
+.form-select:focus {
+
+    border-color: var(--primary);
+
+    box-shadow: 0 0 0 4px rgba(37,99,235,.12);
+
+}
+
+/* =========================================================
+   DARK MODE SELECT FIX
+========================================================= */
+
+[data-bs-theme="dark"] select,
+[data-bs-theme="dark"] .form-select {
+
+    background-color: var(--card);
+    color: var(--text);
+
+    border: 1px solid var(--border);
+
+    /* arrow color lebih terang di dark mode */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* option styling (optional tapi bagus) */
+select option {
+
+    background: var(--card);
+    color: var(--text);
 }
 
 /* =========================================================
@@ -481,7 +515,7 @@ body {
 
     margin: 0;
 
-    font-size: 36px;
+    font-size: 20px;
     font-weight: 800;
 }
 
@@ -525,9 +559,9 @@ body {
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(5, 1fr);
 
-    gap: 28px;
+    gap: 12px;
 }
 
 .product-card {
@@ -574,46 +608,52 @@ body {
     transform: scale(1.08);
 }
 
-.product-badge {
+.product-content {
 
-    position: absolute;
+    padding: 15px;
+}
 
-    top: 18px;
-    left: 18px;
+.product-category, .product-brand {
 
-    background: rgba(255,255,255,.92);
+    display: inline-flex;
+    align-items: center;
 
-    backdrop-filter: blur(10px);
-
-    padding: 8px 14px;
+    padding: 6px 12px;
 
     border-radius: 999px;
 
     font-size: 12px;
     font-weight: 700;
 
-    color: #111827;
-}
+    letter-spacing: .2px;
 
-.product-content {
+    margin-bottom: 12px;
 
-    padding: 24px;
-}
-
-.product-category {
-
+    background: var(--primary-light);
     color: var(--primary);
 
-    font-size: 13px;
-    font-weight: 700;
+    border: 1px solid rgba(37,99,235,.15);
 
-    margin-bottom: 14px;
+    transition: .25s ease;
+}
+
+.product-category:hover, .product-brand:hover {
+    transform: translateY(-1px);
+}
+
+[data-bs-theme="dark"] .product-category, [data-bs-theme="dark"] .product-brand {
+
+    background: rgba(148,163,184,.12);
+
+    color: #f8fafc;
+
+    border: 1px solid rgba(148,163,184,.25);
 }
 
 .product-title {
 
-    font-size: 24px;
-    font-weight: 800;
+    font-size: 14px;
+    /* font-weight: 800; */
 
     line-height: 1.3;
 
@@ -627,11 +667,13 @@ body {
     line-height: 1.8;
 
     min-height: 86px;
+
+    font-size: 12px;
 }
 
 .product-footer {
 
-    margin-top: 26px;
+    margin-top: 15px;
 
     display: flex;
 
@@ -639,26 +681,9 @@ body {
     justify-content: space-between;
 }
 
-.price-label {
-
-    font-size: 12px;
-
-    color: var(--muted);
-}
-
-.product-price {
-
-    margin-top: 4px;
-
-    font-size: 28px;
-    font-weight: 800;
-
-    color: var(--primary);
-}
-
 .detail-btn {
 
-    padding: 12px 18px;
+    padding: 5px;
 
     border-radius: 16px;
 
@@ -671,6 +696,10 @@ body {
     font-weight: 600;
 
     transition: .3s ease;
+
+    width: 100%;
+
+    text-align: center;
 }
 
 .detail-btn:hover {
@@ -756,17 +785,12 @@ body {
     .product-grid {
 
         grid-template-columns:
-            repeat(3, 1fr);
+            repeat(4, 1fr);
     }
 
 }
 
 @media (max-width: 992px) {
-
-    .hero-title {
-
-        font-size: 52px;
-    }
 
     .filter-grid {
 
@@ -776,7 +800,7 @@ body {
     .product-grid {
 
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(3, 1fr);
     }
 
 }
@@ -804,8 +828,13 @@ body {
 @media (max-width: 576px) {
 
     .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
 
-        grid-template-columns: 1fr;
+    .product-image-wrap img {
+        width: 100%;
+        height: 150px;
     }
 
     .hero-title {
@@ -813,9 +842,17 @@ body {
         font-size: 34px;
     }
 
-    .stat-item {
-
-        width: 100%;
+    .content {
+        padding: 5px;
     }
 
+    .product-content {
+
+        padding: 10px;
+    }
+
+    .product-category, .product-brand {
+
+        font-size: 10px;
+    }
 }

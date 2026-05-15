@@ -74,6 +74,8 @@
                         <div class="dropdown-menu-columns">
                             <div class="dropdown-menu-column">
                                 <a class="dropdown-item">Product</a>
+                                <a class="dropdown-item">Product Category</a>
+                                <a class="dropdown-item">Product Brand</a>
                             </div>
                         </div>
                     </div>
