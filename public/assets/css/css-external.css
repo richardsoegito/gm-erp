@@ -1,0 +1,103 @@
+.ts-wrapper .ts-control {
+    border-radius: 8px !important;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    box-shadow: none;
+    transition: all .2s ease;
+}
+
+.ts-wrapper.focus .ts-control {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 .15rem rgba(13,110,253,.15);
+}
+
+.ts-dropdown {
+    border-radius: 14px;
+    border: 1px solid #dee2e6;
+    margin-top: 6px;
+    overflow: hidden;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Responsive DataTable
+|--------------------------------------------------------------------------
+*/
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Table
+|--------------------------------------------------------------------------
+*/
+
+#dt-table {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Header & Cell Spacing
+|--------------------------------------------------------------------------
+*/
+
+#dt-table th,
+#dt-table td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Prevent Text Collision
+|--------------------------------------------------------------------------
+*/
+
+#dt-table td a {
+    display: inline-block;
+    min-width: 180px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Action Buttons
+|--------------------------------------------------------------------------
+*/
+
+.table-data-feature {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mobile Optimization
+|--------------------------------------------------------------------------
+*/
+
+@media (max-width: 768px) {
+
+    #dt-table {
+        min-width: 1100px;
+    }
+
+    #dt-table th,
+    #dt-table td {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+}
+
+#dt-table tbody tr:hover {
+    background: rgba(66, 114, 215, 0.04);
+}

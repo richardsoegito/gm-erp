@@ -1,6 +1,5 @@
-<aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+{{-- <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
     <div class="container-fluid">
-            <!-- BEGIN NAVBAR TOGGLER -->
             <button
             class="navbar-toggler"
             type="button"
@@ -12,18 +11,14 @@
             >
             <span class="navbar-toggler-icon"></span>
             </button>
-            <!-- END NAVBAR TOGGLER -->
-        <!-- BEGIN NAVBAR LOGO -->
         <div class="navbar-brand navbar-brand-autodark">
             <h2>GM ERP</h2>
         </div>
         <div class="collapse navbar-collapse" id="sidebar-menu">
-            <!-- BEGIN NAVBAR MENU -->
             <ul class="navbar-nav">
                 <li class="nav-item">
                 <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="./">
-                    <span class="nav-link-icon d-md-none d-lg-inline-block"
-                    ><!-- Download SVG icon from http://tabler.io/icons/icon/home -->
+                    <span class="nav-link-icon d-md-none d-lg-inline-block">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
@@ -81,7 +76,49 @@
                     </div>
                 </li>
             </ul>
-            <!-- END NAVBAR MENU -->
         </div>
+    </div>
+</aside> --}}
+<aside class="menu-sidebar" id="main-sidebar">
+    <div class="logo">
+        <a href="index.html" class="logo-link" aria-label="CoolAdmin home">
+            <span class="logo-mark" aria-hidden="true">GM</span>
+            <span class="logo-text">GUNUNG MAS</span>
+        </a>
+        <button class="sidebar-close js-sidebar-toggle" type="button" aria-label="Close navigation">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+    </div>
+    <div class="menu-sidebar__content js-scrollbar1">
+        <nav class="navbar-sidebar">
+            <ul class="list-unstyled navbar__list">
+                <li class="{{ request()->is('/') ? 'active' : '' }}">
+                    <a href="{{ url('/') }}"><i class="fa-solid fa-tachometer-alt"></i>Dashboard</a>
+                </li>
+                <li class="has-sub {{ request()->is('master/*') ? 'active' : '' }}">
+                    <a class="js-arrow {{ request()->is('master/*') ? 'open' : '' }}" href="#">
+                        <i class="fas fa-database"></i>
+                        Master
+                    </a>
+                    <ul class="list-unstyled navbar__sub-list js-sub-list"
+                        style="{{ request()->is('master/*') ? 'display:block;' : 'display:none;' }}">
+
+                        <li class="{{ request()->is('master/user*') ? 'active' : '' }}">
+                            <a href="{{ route('master.user.index') }}">User</a>
+                        </li>
+                        <li><a href="data-table.html">Product</a></li>
+                        <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
+                            <a href="{{ route('master.category.index') }}">Categories</a>
+                        </li>
+                        <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
+                            <a href="{{ route('master.brand.index') }}">Brands</a>
+                        </li>
+                        <li class="{{ request()->is('master/units*') ? 'active' : '' }}">
+                            <a href="{{ route('master.unit.index') }}">Units</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
     </div>
 </aside>

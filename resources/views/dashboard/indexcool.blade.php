@@ -2,19 +2,14 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags-->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="generator" content="CoolAdmin 3.0.0">
-    <meta name="description" content="Modern Bootstrap 5 admin dashboard with Chart.js widgets, responsive tables, and clean typography.">
-    <title>Dashboard | CoolAdmin Bootstrap 5 Admin Dashboard</title>
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Dashboard | CoolAdmin Bootstrap 5 Admin Dashboard">
+    <meta name="description" content="ERP Gunung Mas - Enterprise Resources Planning System, Online Store Gunung Mas, Gunung Mas Online Store">
+    <title>ERP Gunung Mas - Enterprise Resources Planning System</title>
+    <meta property="og:type" content="ERP Gunung Mas - Enterprise Resources Planning System">
+    <meta property="og:title" content="ERP Gunung Mas - Enterprise Resources Planning System">
     <meta property="og:description" content="Modern Bootstrap 5 admin dashboard with Chart.js widgets, responsive tables, and clean typography.">
-    <meta property="og:image" content="screenshots/cooladmin-bootstrap-dashboard-2.png">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Dashboard | CoolAdmin Bootstrap 5 Admin Dashboard">
-    <meta name="twitter:description" content="Modern Bootstrap 5 admin dashboard with Chart.js widgets, responsive tables, and clean typography.">
+
     <meta name="theme-color" content="#4272d7">
 
     <!-- Fontfaces CSS-->
@@ -28,7 +23,7 @@
 
     <!-- Vendor CSS-->
     <link href="{{ asset('vendor/css-hamburgers/hamburgers.min.css') }}" rel="stylesheet" media="all">
-
+    
     <!-- Main CSS-->
     <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('assets/css/theme-2026.css') }}" rel="stylesheet" media="all">
@@ -390,7 +385,7 @@
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu" role="button" tabindex="0" aria-haspopup="true" aria-label="Account menu">
                                         <div class="image">
-                                            <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                            <img src="{{ asset('assets/images/icon/avatar-01.jpg') }}" alt="John Doe" />
                                         </div>
                                         <div class="content">
                                             <a class="js-acc-btn" href="#">john doe</a>
@@ -399,7 +394,7 @@
                                             <div class="info clearfix">
                                                 <div class="image">
                                                     <a href="#">
-                                                        <img src="images/icon/avatar-01.jpg" alt="John Doe" />
+                                                        <img src="{{ asset('assets/images/icon/avatar-01.jpg') }}" alt="John Doe" />
                                                     </a>
                                                 </div>
                                                 <div class="content">

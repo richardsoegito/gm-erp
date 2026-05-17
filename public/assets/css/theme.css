@@ -4035,8 +4035,7 @@ a:hover {
 /* ----- Footer ----- */
 .copyright {
     text-align: center;
-    padding: 60px 0;
-    padding-top: 20px;
+    padding-top: 10px;
 }
 
 .copyright p {

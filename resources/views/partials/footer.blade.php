@@ -1,7 +1,7 @@
-<footer class="footer footer-transparent">
-    <div class="px-5">
-        <div class="">
-            © {{ date('Y') }} My Application
+<div class="row">
+    <div class="col-md-12">
+        <div class="copyright">
+            <p>Copyright © {{ now()->format('Y') }} Gunung Mas ERP System. All rights reserved.</p>
         </div>
     </div>
-</footer>
+</div>
