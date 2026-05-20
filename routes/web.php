@@ -6,14 +6,15 @@ use App\Http\Controllers\Master\UserController;
 use App\Http\Controllers\Master\ProductCategoriesController;
 use App\Http\Controllers\Master\ProductBrandController;
 use App\Http\Controllers\Master\ProductUnitController;
+use App\Http\Controllers\Master\ProductController;
+use App\Http\Controllers\CatalogController;
 
 Route::get('/cool', function () {
     return view('dashboard.indexcool');
 });
 
-Route::get('/catalog', function(){
-    return view('catalog.index');
-});
+Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
 
 Route::middleware('guest')->controller(AuthController::class)->group(function () {
 
@@ -63,4 +64,21 @@ Route::middleware('auth')->group(function(){
     Route::get('master/units/{unit:uuid}/edit', [ProductUnitController::class, 'edit'])->name('master.unit.edit');
     Route::put('master/units/{unit:uuid}/edit', [ProductUnitController::class, 'update'])->name('master.unit.update');
     Route::delete('master/units/{unit:uuid}/delete', [ProductUnitController::class, 'destroy'])->name('master.unit.destroy');
+
+    Route::get('master/products', [ProductController::class, 'index'])->name('master.product.index');
+    Route::get('master/products/create', [ProductController::class, 'create'])->name('master.product.create');
+    Route::post('master/products/create', [ProductController::class, 'store'])->name('master.product.store');
+    Route::get('master/products/show', [ProductController::class, 'show'])->name('master.product.show');
+    Route::get('master/products/{product:uuid}/edit', [ProductController::class, 'edit'])->name('master.product.edit');
+    Route::put('master/products/{product:uuid}/edit', [ProductController::class, 'update'])->name('master.product.update');
+    Route::delete('master/products/{product:uuid}/delete', [ProductController::class, 'forceDestroy'])->name('master.product.destroy');
+
+    // Route::get('/storage-status', function () {
+    //     $path = storage_path('app/public');
+    //     $total = disk_total_space($path);
+    //     $free  = disk_free_space($path);
+    //     $used  = $total - $free;
+
+    //     return view('storage.status', compact('total', 'free', 'used'));
+    // });
 });

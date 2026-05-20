@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="ERP Gunung Mas - Enterprise Resources Planning System, Online Store Gunung Mas, Gunung Mas Online Store">
-    <title>@yield('title') | ERP Gunung Mas</title>
+    <title>@yield('title') | Gunung Mas</title>
     <meta property="og:type" content="ERP Gunung Mas - Enterprise Resources Planning System">
     <meta property="og:title" content="ERP Gunung Mas - Enterprise Resources Planning System">
     <meta property="og:description" content="Modern Bootstrap 5 admin dashboard with Chart.js widgets, responsive tables, and clean typography.">
@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <link href="{{ asset('assets/vendor/fontawesome-7.2.0/css/all.min.css') }}" rel="stylesheet" media="all">
 
+    <link rel="icon" href="{{ asset('assets/images/logo_company.jpeg') }}">
+
     <!-- Bootstrap CSS-->
     <link href="{{ asset('assets/vendor/bootstrap-5.3.8.min.css') }}" rel="stylesheet" media="all">
 
@@ -32,8 +34,6 @@
 
     {{-- Animate CSS --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-
-    <title>@yield('title')</title>
 
     @yield('styles')
 </head>
@@ -58,11 +58,11 @@
                             <button class="sidebar-toggle js-sidebar-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="main-sidebar">
                                 <i class="fa-solid fa-bars" aria-hidden="true"></i>
                             </button>
-                            <form class="form-header" role="search" onsubmit="return false">
+                            {{-- <form class="form-header" role="search" onsubmit="return false">
                                 <i class="fa-solid fa-magnifying-glass form-header__icon" aria-hidden="true"></i>
                                 <input class="au-input au-input--xl" type="search" name="search" placeholder="Search anything…" aria-label="Search">
                                 <kbd class="form-header__hint" aria-hidden="true">⌘K</kbd>
-                            </form>
+                            </form> --}}
                             <div class="header-button">
                                 <div class="account-wrap">
                                     <div class="account-item clearfix js-item-menu" role="button" tabindex="0" aria-haspopup="true" aria-label="Account menu">
@@ -84,11 +84,11 @@
                                             <div class="account-dropdown__body">
                                                 <div class="account-dropdown__item">
                                                     <a href="{{ route('master.user.edit', auth()->user()->uuid) }}">
-                                                        <i class="fa-solid fa-user"></i>Account</a>
+                                                        <i class="fa-solid fa-user"></i>Akun Saya</a>
                                                 </div>
                                                 <div class="account-dropdown__item">
                                                     <a href="{{ route('change_password.index') }}">
-                                                        <i class="fa-solid fa-arrows-rotate"></i>Change Password</a>
+                                                        <i class="fa-solid fa-arrows-rotate"></i>Ubah Password</a>
                                                 </div>
                                             </div>
                                             <div class="account-dropdown__footer">
@@ -96,7 +96,7 @@
                                                 id="btn-logout">
 
                                                     <i class="fa-solid fa-power-off"></i>
-                                                    Logout
+                                                    Keluar
 
                                                 </a>
                                                 <!-- Hidden Logout Form -->

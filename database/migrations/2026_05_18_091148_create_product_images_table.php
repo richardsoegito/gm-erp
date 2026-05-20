@@ -12,18 +12,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('product_images', function (Blueprint $table) {
+ 
             $table->id();
-            $table->uuid('uuid')->unique();
+ 
             $table->string('product_id', 20);
-            $table->string('image');
-            $table->integer('sort_order')->default(0);
-            $table->timestamps();
-            $table->index('product_id');
             $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
-                ->cascadeOnDelete();
-
+                  ->references('id')
+                  ->on('products')
+                  ->cascadeOnDelete();
+ 
+            $table->string('label', 100)->nullable();     // e.g. "Front View"
+            $table->string('path');                       // storage path
+            $table->unsignedSmallInteger('sort_order')->default(0);
+ 
+            $table->timestamps();
         });
     }
 

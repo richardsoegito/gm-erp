@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="Sign in to the Gunung Mas ERP System.">
-    <title>Sign in | Gunung Mas ERP</title>
+    <title>Masuk | Gunung Mas ERP</title>
     <meta name="robots" content="noindex,nofollow">
     <meta name="theme-color" content="#4272d7">
 
@@ -20,6 +20,8 @@
 
     <!-- Vendor CSS-->
     <link href="{{ asset('vendor/css-hamburgers/hamburgers.min.css') }}" rel="stylesheet" media="all">
+
+    <link rel="icon" href="{{ asset('assets/images/logo_company.jpeg') }}">
     
     <!-- Main CSS-->
     <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" media="all">
@@ -30,14 +32,14 @@
 <body class="theme-2026 auth-page">
     <main id="auth-form" class="login-wrap">
         <div class="login-content">
-            <a href="index.html" class="auth-brand" aria-label="CoolAdmin home">
-                <span class="logo-mark" aria-hidden="true">GM</span>
-                <span class="logo-text">Gunung Mas</span>
-            </a>
-            <h1 class="auth-title">Welcome back</h1>
-            <p class="auth-subtitle">Sign in to continue to your dashboard.</p>
+            <div class="text-center mb-4">
+                <img src="{{ asset('assets/images/logo_company.jpeg') }}" alt="Logo Perusahaan" width="60" height="60" class="d-block mx-auto mb-2">
+                <h4 class="logo-text fw-bold">Gunung Mas Online Store</h4>
+                <p class="auth-subtitle text-muted">Silakan masuk menggunakan akun Anda.</p>
+            </div>
 
-            <form class="login-form"
+            <!-- Tambahkan id="login-form" -->
+            <form id="login-form" class="login-form"
                 action="{{ route('login.authenticate') }}"
                 method="POST">
 
@@ -108,11 +110,11 @@
                 </div>
 
                 <!-- Submit -->
-                <button class="btn btn-primary text-center w-100"
+                <!-- Tambahkan id="submit-btn" -->
+                <button id="submit-btn" class="btn btn-primary text-center w-100"
                         type="submit">
-
-                    Sign in
-
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    Masuk
                 </button>
 
             </form>
@@ -123,7 +125,7 @@
     <script src="{{ asset('assets/js/vanilla-utils.js') }}"></script>
     <!-- Bootstrap JS-->
     <script src="{{ asset('assets/vendor/bootstrap-5.3.8.bundle.min.js') }}"></script>
-    <!-- Vendor JS       -->
+    <!-- Vendor JS      -->
     <script src="{{ asset('assets/vendor/chartjs/chart.umd.js-4.5.1.min.js') }}"></script>
 
     <!-- Main JS-->
@@ -134,36 +136,32 @@
     <script>
         ready(() => {
 
+            // Fitur Toggle Password
             const passwordInput = $('#password');
-
             const togglePassword = $('#toggle-password');
-
             const icon = togglePassword.querySelector('i');
 
             on(togglePassword, 'click', () => {
 
-                const isPassword =
-                    passwordInput.type === 'password';
+                const isPassword = passwordInput.type === 'password';
 
-                /*
-                |--------------------------------------------------------------------------
-                | Toggle Input Type
-                |--------------------------------------------------------------------------
-                */
-
-                passwordInput.type =
-                    isPassword ? 'text' : 'password';
-
-                /*
-                |--------------------------------------------------------------------------
-                | Toggle Icon
-                |--------------------------------------------------------------------------
-                */
+                passwordInput.type = isPassword ? 'text' : 'password';
 
                 icon.classList.toggle('fa-eye');
-
                 icon.classList.toggle('fa-eye-slash');
 
+            });
+
+            // Fitur Loading Animasi saat Submit
+            const loginForm = $('#login-form');
+            const submitBtn = $('#submit-btn');
+
+            on(loginForm, 'submit', () => {
+                // Nonaktifkan tombol agar tidak bisa di-klik dua kali
+                submitBtn.disabled = true;
+                
+                // Ubah teks dan tambahkan class fa-spin (animasi berputar bawaan FontAwesome)
+                submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
             });
 
         });

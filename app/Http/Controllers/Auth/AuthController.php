@@ -116,7 +116,7 @@ class AuthController extends Controller
             */
 
             return redirect()
-                ->route('dashboard.index');
+                ->route('master.product.index');
 
         }
 

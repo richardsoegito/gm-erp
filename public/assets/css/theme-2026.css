@@ -6367,8 +6367,9 @@ body.theme-2026 .cmdk-item__icon {
     font-weight: 600;
 }
 @media (max-width: 575.98px) {
-    .theme-switcher { bottom: 12px; left: 12px; }
-    .theme-switcher__panel { width: 220px; }
+    .theme-switcher {
+        display: none !important;
+    }
 }
 
 

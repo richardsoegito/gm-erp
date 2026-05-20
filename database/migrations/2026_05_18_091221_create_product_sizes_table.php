@@ -13,15 +13,18 @@ return new class extends Migration
     {
         Schema::create('product_sizes', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->unique();
             $table->string('product_id', 20);
-            $table->string('size', 100);
-            $table->timestamps();
-            $table->index('product_id');
             $table->foreign('product_id')
-                ->references('id')
-                ->on('products')
-                ->cascadeOnDelete();
+                  ->references('id')
+                  ->on('products')
+                  ->cascadeOnDelete();
+ 
+            // Dimensions in cm, up to 9999.99
+            $table->decimal('width',  7, 2)->nullable();
+            $table->decimal('length', 7, 2)->nullable();
+            $table->decimal('height', 7, 2)->nullable();
+ 
+            $table->timestamps();
         });
     }
 

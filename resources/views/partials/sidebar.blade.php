@@ -92,8 +92,14 @@
     <div class="menu-sidebar__content js-scrollbar1">
         <nav class="navbar-sidebar">
             <ul class="list-unstyled navbar__list">
-                <li class="{{ request()->is('/') ? 'active' : '' }}">
+                {{-- <li class="{{ request()->is('/') ? 'active' : '' }}">
                     <a href="{{ url('/') }}"><i class="fa-solid fa-tachometer-alt"></i>Dashboard</a>
+                </li> --}}
+                <li>
+                    <a href="{{ url('catalog') }}">
+                        <i class="fa-regular fa-image"></i>
+                        Catalog
+                    </a>
                 </li>
                 <li class="has-sub {{ request()->is('master/*') ? 'active' : '' }}">
                     <a class="js-arrow {{ request()->is('master/*') ? 'open' : '' }}" href="#">
@@ -106,15 +112,17 @@
                         <li class="{{ request()->is('master/user*') ? 'active' : '' }}">
                             <a href="{{ route('master.user.index') }}">User</a>
                         </li>
-                        <li><a href="data-table.html">Product</a></li>
-                        <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
-                            <a href="{{ route('master.category.index') }}">Categories</a>
-                        </li>
                         <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
-                            <a href="{{ route('master.brand.index') }}">Brands</a>
+                            <a href="{{ route('master.brand.index') }}">Merek</a>
+                        </li>
+                        <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
+                            <a href="{{ route('master.category.index') }}">Kategori</a>
                         </li>
                         <li class="{{ request()->is('master/units*') ? 'active' : '' }}">
-                            <a href="{{ route('master.unit.index') }}">Units</a>
+                            <a href="{{ route('master.unit.index') }}">Satuan</a>
+                        </li>
+                        <li class="{{ request()->is('master/products*') ? 'active' : '' }}">
+                            <a href="{{ route('master.product.index') }}">Produk</a>
                         </li>
                     </ul>
                 </li>

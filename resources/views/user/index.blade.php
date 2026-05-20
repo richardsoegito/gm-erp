@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'List User')
+@section('title', 'Daftar User')
 
 @section('content')
 
@@ -8,35 +8,35 @@
     <div class="card">
         <div class="card-header d-flex align-items-center justify-content-between">
             <div>
-                List User
+                Daftar User
             </div>
             <div class="">
-                <a href="{{ route('master.user.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Create New User</a>
+                <a href="{{ route('master.user.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah User Baru</a>
             </div>
         </div>
         <div class="card-body">
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show animate__animated animate__bounceInLeft" role="alert">
                     <i class="fa-solid fa-circle-check" style="margin-top: 5px; margin-right:5px;"></i>
-                    <strong>Success!</strong> {{ session('success') }}
+                    <strong>Berhasil!</strong> {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
             <div class="dt-toolbar">
                 <div class="dt-search">
                     <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
-                    <input type="search" id="dt-search-input" placeholder="Search any column…" aria-label="Search">
+                    <input type="search" id="dt-search-input" placeholder="Pencarian Data…" aria-label="Search">
                 </div>
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <label style="font-size: 12.5px; color: var(--m-text-muted); display: inline-flex; align-items: center; gap: 8px;">
-                        Show
+                        Tampilkan
                         <select id="dt-page-size" class="form-select" style="width: 80px; height: 32px; padding: 0 24px 0 10px; font-size: 12.5px;">
                             <option>5</option>
                             <option selected>10</option>
                             <option>20</option>
                             <option>50</option>
                         </select>
-                        rows
+                        baris
                     </label>
                 </div>
             </div>
@@ -46,12 +46,12 @@
                     <thead>
                         <tr>
                             <th width="60">No</th>
-                            <th data-sort="name">Name</th>
+                            <th data-sort="name">Nama</th>
                             <th data-sort="email">Email</th>
                             <th data-sort="plan">Role</th>
-                            <th data-sort="amount" class="num">Phone</th>
+                            <th data-sort="amount" class="num">No Telp</th>
                             <th data-sort="status">Status</th>
-                            <th data-sort="signup">Actions</th>
+                            <th data-sort="signup">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="dt-body"></tbody>
@@ -122,12 +122,12 @@
             const STATUS = {
 
                 active: {
-                    label: 'Active',
+                    label: 'Aktif',
                     cls: 'status--process'
                 },
 
                 inactive: {
-                    label: 'Inactive',
+                    label: 'Tidak Aktif',
                     cls: 'status--denied'
                 },
 
@@ -401,7 +401,7 @@
 
                     ? 'No results'
 
-                    : `Showing ${start + 1}–${start + slice.length} of ${total}`;
+                    : `Menampilkan ${start + 1}–${start + slice.length} dari ${total}`;
 
                 /*
                 |--------------------------------------------------------------------------

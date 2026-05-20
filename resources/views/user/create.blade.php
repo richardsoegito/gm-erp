@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', $editing ? 'Edit User' :  'Create New User')
+@section('title', $editing ? 'Ubah Pengguna' :  'Tambah Pengguna Baru')
 
 @section('content')
 
 <div class="row">
     <div class="card">
         <div class="card-header">
-            {{ $editing ? 'Edit User' : 'Create New User' }}
+            {{ $editing ? 'Ubah Pengguna' : 'Tambah Pengguna Baru' }}
         </div>
         <form id="user-form" action="{{ $editing ? route('master.user.update', $user) : route('master.user.store') }}"
             method="POST"
@@ -26,21 +26,21 @@
                         </label>
                         <div class="form-check form-switch">
                             <input class="form-check-input" type="checkbox" name="status" id="status" {{ $editing ? ($user->status ? 'checked' : '') : 'checked' }}>
-                            <label class="form-check-label" for="status">Active</label>
+                            <label class="form-check-label" for="status">Aktif</label>
                         </div>
                     </div>
                     <!-- Name -->
                     <div class="col-md-6 mb-3">
 
                         <label for="name" class="form-control-label">
-                            Full Name
+                            Nama Lengkap
                             <span class="text-danger">*</span>
                         </label>
 
                         <input type="text"
                             id="name"
                             name="name"
-                            placeholder="Enter Full Name"
+                            placeholder="Masukkan Nama Lengkap"
                             value="{{ $editing ? old('name', $user->name) : old('name') }}"
                             class="form-control @error('name') is-invalid @enderror">
 
@@ -63,7 +63,7 @@
                         <input type="text"
                             id="username"
                             name="username"
-                            placeholder="Enter Username"
+                            placeholder="Masukkan Username"
                             value="{{ $editing ? old('username', $user->username) : old('username') }}"
                             class="form-control @error('username') is-invalid @enderror">
 
@@ -86,7 +86,7 @@
                         <input type="email"
                             id="email"
                             name="email"
-                            placeholder="Enter Email"
+                            placeholder="Masukkan Email"
                             value="{{ $editing ? old('email', $user->email) : old('email') }}"
                             class="form-control @error('email') is-invalid @enderror">
 
@@ -102,13 +102,13 @@
                     <div class="col-md-6 mb-3">
 
                         <label for="phone" class="form-control-label">
-                            Phone Number
+                            Nomor Telepon
                         </label>
 
                         <input type="text"
                             id="phone"
                             name="phone"
-                            placeholder="Enter Phone Number"
+                            placeholder="Masukkan Nomor Telepon"
                             value="{{ $editing ? old('phone', $user->phone) : old('phone') }}"
                             class="form-control @error('phone') is-invalid @enderror">
 
@@ -124,14 +124,14 @@
                     <div class="col-md-6 mb-3 {{ $editing ? 'd-none' : '' }}">
 
                         <label for="password" class="form-control-label">
-                            Password
+                            Kata Sandi
                             <span class="text-danger">*</span>
                         </label>
 
                         <input type="password"
                             id="password"
                             name="password"
-                            placeholder="Enter Password"
+                            placeholder="Masukkan Kata Sandi"
                             class="form-control @error('password') is-invalid @enderror">
                     </div>
 
@@ -141,7 +141,7 @@
                         <label for="password_confirmation"
                             class="form-control-label">
 
-                            Confirm Password
+                            Konfirmasi Kata Sandi
                             <span class="text-danger">*</span>
 
                         </label>
@@ -149,7 +149,7 @@
                         <input type="password"
                             id="password_confirmation"
                             name="password_confirmation"
-                            placeholder="Confirm Password"
+                            placeholder="Konfirmasi Kata Sandi"
                             class="form-control @error('password_confirmation') is-invalid @enderror">
 
                         @error('password_confirmation')
@@ -197,14 +197,14 @@
                     <div class="col-md-6 mb-3">
 
                         <label for="profile_picture" class="form-control-label">
-                            Profile Picture
+                            Foto Profil
                         </label>
 
                         <!-- Preview -->
                         <div class="mb-3">
 
                             <img id="preview-image"
-                                src="{{ $editing ? ($user->avatar ? asset('storage/profile-picture/' . $user->avatar) : 'https://placehold.co/120x120?text=No+Image') : 'https://placehold.co/120x120?text=No+Image' }}"
+                                src="{{ $editing ? ($user->avatar ? asset('storage/profile-picture/' . $user->avatar) : 'https://placehold.co/120x120?text=Tanpa+Foto') : 'https://placehold.co/120x120?text=Tanpa+Foto' }}"
                                 alt="Preview"
                                 class="img-thumbnail"
                                 style="width:120px; height:120px; object-fit:cover;">
@@ -226,12 +226,12 @@
 
                         <!-- Help -->
                         <small class="text-muted d-block mt-2">
-                            Allowed file types:
+                            Format file yang diizinkan:
                             JPG, JPEG, PNG, WEBP
                         </small>
 
                         <small class="text-muted d-block">
-                            Maximum upload size: 5 MB
+                            Ukuran maksimal unggahan: 5 MB
                         </small>
 
                     </div>
@@ -246,7 +246,7 @@
 
                     <i class="fa-solid fa-chevron-left"></i>
 
-                    Back
+                    Kembali
 
                 </a>
                 <button type="submit"
@@ -257,7 +257,7 @@
 
                     <i class="fa-regular fa-dot-circle"></i>
 
-                    {{ $editing ? 'Update User' : 'Save User' }}
+                    {{ $editing ? 'Perbarui Pengguna' : 'Simpan Pengguna' }}
 
                 </span>
 
@@ -265,7 +265,7 @@
 
                     <i class="fa-solid fa-spinner fa-spin"></i>
 
-                    Processing...
+                    Memproses...
 
                 </span>
 
@@ -315,14 +315,14 @@
 
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Warning',
-                        text: 'Only JPG, JPEG, PNG, and WEBP files are allowed.'
+                        title: 'Peringatan',
+                        text: 'Hanya file JPG, JPEG, PNG, dan WEBP yang diizinkan.'
                     });
 
                     this.value = '';
 
                     $('#preview-image').src =
-                        'https://placehold.co/120x120?text=No+Image';
+                        'https://placehold.co/120x120?text=Tanpa+Foto';
 
                     return;
                 }
@@ -337,14 +337,14 @@
 
                     Swal.fire({
                         icon: 'warning',
-                        title: 'Warning',
-                        text: 'Maximum upload size is 5 MB.'
+                        title: 'Peringatan',
+                        text: 'Ukuran maksimal unggahan adalah 5 MB.'
                     });
 
                     this.value = '';
 
                     $('#preview-image').src =
-                        'https://placehold.co/120x120?text=No+Image';
+                        'https://placehold.co/120x120?text=Tanpa+Foto';
 
                     return;
                 }
@@ -376,17 +376,15 @@
             const roleSelect = $('#role_id');
 
             if (roleSelect) {
-
                 new TomSelect(roleSelect, {
                     create: false,
-                    placeholder: 'Select Role',
+                    placeholder: 'Pilih Role',
                     allowEmptyOption: true,
                     sortField: {
                         field: 'text',
                         direction: 'asc'
                     }
                 });
-
             }
 
             /*

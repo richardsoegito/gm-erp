@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Product Unit')
+@section('title', 'Satuan')
 
 @section('content')
 
@@ -8,7 +8,7 @@
     @if (session('success'))
         <div class="alert alert-success alert-dismissible fade show animate__animated animate__bounceInLeft" role="alert">
             <i class="fa-solid fa-circle-check" style="margin-top: 5px; margin-right:5px;"></i>
-            <strong>Success!</strong> {{ session('success') }}
+            <strong>Berhasil!</strong> {{ session('success') }}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
@@ -17,7 +17,7 @@
         <div class="card">
 
             <div class="card-header">
-                {{ $editing ? 'Update Unit' : 'Create Unit' }}
+                {{ $editing ? 'Ubah Satuan' : 'Menambah Satuan' }}
             </div>
 
             <form id="unit-form" action="{{ $editing ? route('master.unit.update', $unit) : route('master.unit.store') }}"
@@ -29,7 +29,7 @@
 
                 <div class="card-body">
                     <!-- Unit ID -->
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="id" class="form-control-label">
                             Unit ID
                         </label>
@@ -40,18 +40,18 @@
                             placeholder="Auto Generate"
                             readonly
                             value = "{{ $editing ? $unit->id : $generateId }}">
-                    </div>
+                    </div> --}}
 
                     <!-- Name -->
                     <div class="mb-3">
                         <label for="name" class="form-control-label">
-                            Unit Name<span class="text-danger">*</span>
+                            Nama Satuan<span class="text-danger">*</span>
                         </label>
                         <input type="text"
                             id="name"
                             name="name"
                             class="form-control @error('name') is-invalid @enderror"
-                            placeholder="Enter Unit Name"
+                            placeholder="Masukkan Nama Satuan"
                             value="{{ $editing ? old('name', $unit->name) : old('name') }}">
                         @error('name')
                             <div class="invalid-feedback">
@@ -65,14 +65,14 @@
                     <div class="mb-3">
 
                         <label for="description" class="form-control-label">
-                            Description
+                            Keterangan
                         </label>
 
                         <textarea id="description"
                             name="description"
                             rows="4"
                             class="form-control @error('description') is-invalid @enderror"
-                            placeholder="Enter Description">{{ $editing ? old('description', $unit->description) : old('description') }}</textarea>
+                            placeholder="">{{ $editing ? old('description', $unit->description) : old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -99,7 +99,7 @@
                             <label class="form-check-label"
                                 for="status">
 
-                                Active
+                                Aktif
 
                             </label>
 
@@ -123,7 +123,7 @@
                     <button type="submit" id="submit-btn" class="btn btn-primary">
                         <span class="btn-text">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            {{ $editing ? 'Update Unit' : 'Save Unit' }}
+                            {{ $editing ? 'Ubah Satuan' : 'Menambah Satuan' }}
                         </span>
 
                         <span class="btn-loading d-none">
@@ -148,7 +148,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
 
                 <div>
-                    Unit List
+                    Daftar Satuan
                 </div>
 
             </div>
@@ -158,18 +158,18 @@
                 <div class="dt-toolbar">
                     <div class="dt-search">
                         <i class="fa-solid fa-magnifying-glass"aria-hidden="true"></i>
-                        <input type="search" id="dt-search-input" placeholder="Search any column…" aria-label="Search">
+                        <input type="search" id="dt-search-input" placeholder="Pencarian Data…" aria-label="Search">
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <label style="font-size:12.5px; color:var(--m-text-muted); display:inline-flex; align-items:center; gap:8px;">
-                            Show
+                            Tampilkan
                             <select id="dt-page-size" class="form-select" style="width:80px; height:32px; padding:0 24px 0 10px; font-size:12.5px;">
                                 <option>5</option>
                                 <option selected>10</option>
                                 <option>20</option>
                                 <option>50</option>
                             </select>
-                            rows
+                            baris
                         </label>
                     </div>
                 </div>
@@ -179,9 +179,9 @@
                         <thead>
                             <tr>
                                 <th width="60">No</th>
-                                <th data-sort="name">Unit Name</th>
+                                <th data-sort="name">Nama Satuan</th>
                                 <th data-sort="status">Status</th>
-                                <th>Actions</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="dt-body"></tbody>
@@ -278,12 +278,12 @@
 
         const STATUS = {
             active: {
-                label: 'Active',
+                label: 'Aktif',
                 cls: 'status--process'
             },
 
             inactive: {
-                label: 'Inactive',
+                label: 'Tidak Aktif',
                 cls: 'status--denied'
             },
         };

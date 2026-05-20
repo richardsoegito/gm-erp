@@ -17,7 +17,7 @@
         <div class="card">
 
             <div class="card-header">
-                {{ $editing ? 'Update Brand' : 'Create Brand' }}
+                {{ $editing ? 'Ubah Merek' : 'Menambah Merek' }}
             </div>
 
             <form id="brand-form" action="{{ $editing ? route('master.brand.update', $brand) : route('master.brand.store') }}"
@@ -29,7 +29,7 @@
 
                 <div class="card-body">
                     <!-- Brand ID -->
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="id" class="form-control-label">
                             Brand ID
                         </label>
@@ -40,18 +40,18 @@
                             placeholder="Auto Generate"
                             readonly
                             value = "{{ $editing ? $brand->id : $generateId }}">
-                    </div>
+                    </div> --}}
 
                     <!-- Name -->
                     <div class="mb-3">
                         <label for="name" class="form-control-label">
-                            Brand Name<span class="text-danger">*</span>
+                            Nama Merek<span class="text-danger">*</span>
                         </label>
                         <input type="text"
                             id="name"
                             name="name"
                             class="form-control @error('name') is-invalid @enderror"
-                            placeholder="Enter Brand Name"
+                            placeholder="Masukkan Nama Merek"
                             value="{{ $editing ? old('name', $brand->name) : old('name') }}">
                         @error('name')
                             <div class="invalid-feedback">
@@ -65,14 +65,14 @@
                     <div class="mb-3">
 
                         <label for="description" class="form-control-label">
-                            Description
+                            Keterangan
                         </label>
 
                         <textarea id="description"
                             name="description"
                             rows="4"
                             class="form-control @error('description') is-invalid @enderror"
-                            placeholder="Enter Description">{{ $editing ? old('description', $brand->description) : old('description') }}</textarea>
+                            placeholder="">{{ $editing ? old('description', $brand->description) : old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -85,7 +85,7 @@
                     <div class="mb-3">
 
                         <label class="form-control-label">
-                            Status
+                            Status Merek
                         </label>
 
                         <div class="form-check form-switch">
@@ -99,7 +99,7 @@
                             <label class="form-check-label"
                                 for="status">
 
-                                Active
+                                Aktif
 
                             </label>
 
@@ -123,7 +123,7 @@
                     <button type="submit" id="submit-btn" class="btn btn-primary">
                         <span class="btn-text">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            {{ $editing ? 'Update Brand' : 'Save Brand' }}
+                            {{ $editing ? 'Ubah Merek' : 'Simpan Merek' }}
                         </span>
 
                         <span class="btn-loading d-none">
@@ -148,7 +148,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
 
                 <div>
-                    Brand List
+                    Daftar Merek
                 </div>
 
             </div>
@@ -158,18 +158,18 @@
                 <div class="dt-toolbar">
                     <div class="dt-search">
                         <i class="fa-solid fa-magnifying-glass"aria-hidden="true"></i>
-                        <input type="search" id="dt-search-input" placeholder="Search any column…" aria-label="Search">
+                        <input type="search" id="dt-search-input" placeholder="Pencarian Data…" aria-label="Search">
                     </div>
                     <div style="display:flex; gap:8px; align-items:center;">
                         <label style="font-size:12.5px; color:var(--m-text-muted); display:inline-flex; align-items:center; gap:8px;">
-                            Show
+                            Tampilkan
                             <select id="dt-page-size" class="form-select" style="width:80px; height:32px; padding:0 24px 0 10px; font-size:12.5px;">
                                 <option>5</option>
                                 <option selected>10</option>
                                 <option>20</option>
                                 <option>50</option>
                             </select>
-                            rows
+                            baris
                         </label>
                     </div>
                 </div>
@@ -179,9 +179,9 @@
                         <thead>
                             <tr>
                                 <th width="60">No</th>
-                                <th data-sort="name">Brand Name</th>
-                                <th data-sort="status">Status</th>
-                                <th>Actions</th>
+                                <th data-sort="name">Nama Merek</th>
+                                <th data-sort="status">Status Merek</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody id="dt-body"></tbody>
@@ -534,7 +534,7 @@
 
                 ? 'No results'
 
-                : `Showing ${start + 1}–${start + slice.length} of ${total}`;
+                : `Menampilkan ${start + 1}–${start + slice.length} dari ${total}`;
 
             /*
             |--------------------------------------------------------------------------

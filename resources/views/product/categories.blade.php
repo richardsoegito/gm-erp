@@ -29,7 +29,7 @@
 
                 <div class="card-body">
                     <!-- Category ID -->
-                    <div class="mb-3">
+                    {{-- <div class="mb-3">
                         <label for="id" class="form-control-label">
                             Category ID
                         </label>
@@ -40,18 +40,18 @@
                             placeholder="Auto Generate"
                             readonly
                             value = "{{ $editing ? $categories->id : $generateId }}">
-                    </div>
+                    </div> --}}
 
                     <!-- Name -->
                     <div class="mb-3">
                         <label for="name" class="form-control-label">
-                            Category Name<span class="text-danger">*</span>
+                            Nama Kategori<span class="text-danger">*</span>
                         </label>
                         <input type="text"
                             id="name"
                             name="name"
                             class="form-control @error('name') is-invalid @enderror"
-                            placeholder="Enter Category Name"
+                            placeholder="Masukkan Nama Kategori"
                             value="{{ $editing ? old('name', $categories->name) : old('name') }}">
                         @error('name')
                             <div class="invalid-feedback">
@@ -65,14 +65,14 @@
                     <div class="mb-3">
 
                         <label for="description" class="form-control-label">
-                            Description
+                            Keterangan
                         </label>
 
                         <textarea id="description"
                             name="description"
                             rows="4"
                             class="form-control @error('description') is-invalid @enderror"
-                            placeholder="Enter Description">{{ $editing ? old('description', $categories->description) : old('description') }}</textarea>
+                            placeholder="">{{ $editing ? old('description', $categories->description) : old('description') }}</textarea>
                         @error('description')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -99,7 +99,7 @@
                             <label class="form-check-label"
                                 for="status">
 
-                                Active
+                                Aktif
 
                             </label>
 
