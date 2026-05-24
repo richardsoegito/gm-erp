@@ -166,4 +166,19 @@ class ProductBrandController extends Controller
 
         }
     }
+
+    public function toggleStatus(Request $request, $id) 
+    {
+        // Cari data berdasarkan ID/UUID
+        $brand = ProductBrand::where('uuid', $id)->firstOrFail(); 
+
+        // Simpan status (1 atau 0) yang dikirimkan via fetch JSON
+        $brand->status = $request->status; 
+        $brand->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Status merek berhasil diperbarui.'
+        ]);
+    }
 }

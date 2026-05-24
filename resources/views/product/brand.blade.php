@@ -80,16 +80,23 @@
                         <i class="fa-solid fa-rotate-left"></i>
                         Reset
                     </button>
-                    <button type="submit" id="submit-btn" class="btn btn-primary">
-                        <span class="btn-text">
-                            <i class="fa-solid fa-floppy-disk"></i>
-                            {{ $editing ? 'Ubah Merek' : 'Simpan Merek' }}
-                        </span>
-                        <span class="btn-loading d-none">
-                            <i class="fa-solid fa-spinner fa-spin"></i>
-                            Processing...
-                        </span>
-                    </button>
+                    @if(
+                        ($editing && auth()->user()->can('update-brand')) ||
+                        (!$editing && auth()->user()->can('create-brand'))
+                    )
+
+                        <button type="submit" id="submit-btn" class="btn btn-primary">
+                            <span class="btn-text">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                {{ $editing ? 'Ubah Merek' : 'Simpan Merek' }}
+                            </span>
+
+                            <span class="btn-loading d-none">
+                                <i class="fa-solid fa-spinner fa-spin"></i>
+                                Processing...
+                            </span>
+                        </button>
+                    @endif
                 </div>
             </form>
         </div>

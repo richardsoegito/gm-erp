@@ -65,13 +65,25 @@ Route::middleware('auth')->group(function(){
     Route::put('master/categories/{category:uuid}/edit', [ProductCategoriesController::class, 'update'])->name('master.category.update');
     Route::delete('master/categories/{category:uuid}/delete', [ProductCategoriesController::class, 'destroy'])->name('master.category.destroy');
 
-    Route::get('master/brands', [ProductBrandController::class, 'index'])->name('master.brand.index');
-    Route::post('master/brands', [ProductBrandController::class, 'store'])->name('master.brand.store');
-    Route::get('master/brands/show', [ProductBrandController::class, 'show'])->name('master.brand.show');
-    Route::get('master/brands/{brand:uuid}/edit', [ProductBrandController::class, 'edit'])->name('master.brand.edit');
-    Route::put('master/brands/{brand:uuid}/edit', [ProductBrandController::class, 'update'])->name('master.brand.update');
-    Route::delete('master/brands/{brand:uuid}/delete', [ProductBrandController::class, 'destroy'])->name('master.brand.destroy');
-    Route::patch('/master/brand/{id}/toggle-status', [ProductBrandController::class, 'toggleStatus'])->name('master.brand.toggleStatus');
+    Route::middleware('permission:read-brand')->group(function(){
+        Route::get('master/brands', [ProductBrandController::class, 'index'])->name('master.brand.index');
+        Route::get('master/brands/show', [ProductBrandController::class, 'show'])->name('master.brand.show');
+        Route::get('master/brands/{brand:uuid}/edit', [ProductBrandController::class, 'edit'])->name('master.brand.edit');
+    });
+
+    Route::middleware('permission:create-brand')->group(function(){
+        Route::post('master/brands', [ProductBrandController::class, 'store'])->name('master.brand.store');
+    });
+
+    Route::middleware('permission:update-brand')->group(function(){
+        Route::put('master/brands/{brand:uuid}/edit', [ProductBrandController::class, 'update'])->name('master.brand.update');
+        Route::patch('/master/brand/{id}/toggle-status', [ProductBrandController::class, 'toggleStatus'])->name('master.brand.toggleStatus');
+    });
+
+    Route::middleware('permission:delete-brand')->group(function(){
+        Route::delete('master/brands/{brand:uuid}/delete', [ProductBrandController::class, 'destroy'])->name('master.brand.destroy');
+    });
+
 
     Route::get('master/units', [ProductUnitController::class, 'index'])->name('master.unit.index');
     Route::post('master/units', [ProductUnitController::class, 'store'])->name('master.unit.store');

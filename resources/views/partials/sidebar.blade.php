@@ -114,9 +114,11 @@
                                     <a href="{{ route('master.user.index') }}">User</a>
                                 </li>
                             @endcan
-                            <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
-                                <a href="{{ route('master.brand.index') }}">Merek</a>
-                            </li>
+                            @can('read-brand')
+                                <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
+                                    <a href="{{ route('master.brand.index') }}">Merek</a>
+                                </li>
+                            @endcan
                             <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
                                 <a href="{{ route('master.category.index') }}">Kategori</a>
                             </li>
