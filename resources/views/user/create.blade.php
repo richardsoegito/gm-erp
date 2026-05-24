@@ -169,14 +169,23 @@
                         </label>
 
                         <select name="role_id"
-                                id="role_id"
-                                class="@error('role_id') is-invalid @enderror">
+                            id="role_id"
+                            class="@error('role_id') is-invalid @enderror">
 
                             @foreach ($roles as $role)
 
                                 <option value="{{ $role->id }}"
-                                    {{ old('role_id') == $role->id ? 'selected' : '' }}>
-
+                                    {{
+                                        old(
+                                            'role_id',
+                                            $editing
+                                                ? $user->roles->first()?->id
+                                                : ''
+                                        ) == $role->id
+                                            ? 'selected'
+                                            : ''
+                                    }}>
+                                    
                                     {{ $role->name }}
 
                                 </option>
