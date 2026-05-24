@@ -9,6 +9,7 @@ use App\Models\Settings\PermissionParentGroup;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\PermissionRegistrar;
 
 class GroupUsersController extends Controller
 {
@@ -107,6 +108,8 @@ class GroupUsersController extends Controller
     
                 $role->syncPermissions($request->permissions);
             }
+
+            app()[PermissionRegistrar::class]->forgetCachedPermissions();
         });
 
 
@@ -129,6 +132,8 @@ class GroupUsersController extends Controller
             $role->syncPermissions(
                 $request->permissions ?? []
             );
+
+            app()[PermissionRegistrar::class]->forgetCachedPermissions();
         });
 
 
