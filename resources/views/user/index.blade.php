@@ -10,9 +10,11 @@
             <div>
                 Daftar User
             </div>
-            <div class="">
-                <a href="{{ route('master.user.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah User Baru</a>
-            </div>
+            @if (auth()->user()->can('create-user'))
+                <div class="">
+                    <a href="{{ route('master.user.create') }}" class="btn btn-primary"><i class="fa fa-plus"></i> Tambah User Baru</a>
+                </div>
+            @endif
         </div>
         <div class="card-body">
             @if (session('success'))

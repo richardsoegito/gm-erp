@@ -23,34 +23,36 @@ class UserController extends Controller
 
     public function show()
     {
-        $users = User::with('roles')
-            ->latest()
-            ->get()
-            ->map(function ($user) {
+        // 1. Ambil data user yang sedang login
+        $currentUser = auth()->user();
 
-                return [
+        // Cek apakah user yang login punya role 'Developer'
+        // Sesuaikan cara cek role ini dengan sistem yang Anda gunakan (misal: jika pakai Spatie bisa pakai ->hasRole('Developer'))
+        $isDeveloper = $currentUser->roles->where('name', 'Developer')->isNotEmpty();
 
-                    'id' => $user->id,
+        // 2. Mulai query
+        $query = User::with('roles')->latest();
 
-                    'name' => $user->name,
-
-                    'email' => $user->email,
-
-                    'phone' => $user->phone,
-
-                    'role' => $user->roles->first()?->name,
-
-                    'status' => $user->status
-                        ? 'active'
-                        : 'inactive',
-
-                    'uuid' => $user->uuid,
-
-                    'created_at' => $user->created_at,
-
-                ];
-
+        // 3. Jika yang login BUKAN Developer, kecualikan user dengan role Developer
+        if (!$isDeveloper) {
+            $query->whereDoesntHave('roles', function ($q) {
+                $q->where('name', 'Developer'); // Pastikan 'Developer' sesuai dengan penulisan di database Anda
             });
+        }
+
+        // 4. Eksekusi query dan mapping datanya
+        $users = $query->get()->map(function ($user) {
+            return [
+                'id'         => $user->id,
+                'name'       => $user->name,
+                'email'      => $user->email,
+                'phone'      => $user->phone,
+                'role'       => $user->roles->first()?->name,
+                'status'     => $user->status ? 'active' : 'inactive',
+                'uuid'       => $user->uuid,
+                'created_at' => $user->created_at,
+            ];
+        });
 
         return response()->json($users);
     }
