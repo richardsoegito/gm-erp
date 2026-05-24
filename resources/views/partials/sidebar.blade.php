@@ -101,31 +101,51 @@
                         Catalog
                     </a>
                 </li>
-                <li class="has-sub {{ request()->is('master/*') ? 'active' : '' }}">
-                    <a class="js-arrow {{ request()->is('master/*') ? 'open' : '' }}" href="#">
-                        <i class="fas fa-database"></i>
-                        Master
-                    </a>
-                    <ul class="list-unstyled navbar__sub-list js-sub-list"
-                        style="{{ request()->is('master/*') ? 'display:block;' : 'display:none;' }}">
+                @canany(['read-user'])
+                    <li class="has-sub {{ request()->is('master/*') ? 'active' : '' }}">
+                        <a class="js-arrow {{ request()->is('master/*') ? 'open' : '' }}" href="#">
+                            <i class="fas fa-database"></i>
+                            Master
+                        </a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list"
+                            style="{{ request()->is('master/*') ? 'display:block;' : 'display:none;' }}">
+                            @can('read-user')
+                                <li class="{{ request()->is('master/user*') ? 'active' : '' }}">
+                                    <a href="{{ route('master.user.index') }}">User</a>
+                                </li>
+                            @endcan
+                            <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
+                                <a href="{{ route('master.brand.index') }}">Merek</a>
+                            </li>
+                            <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
+                                <a href="{{ route('master.category.index') }}">Kategori</a>
+                            </li>
+                            <li class="{{ request()->is('master/units*') ? 'active' : '' }}">
+                                <a href="{{ route('master.unit.index') }}">Satuan</a>
+                            </li>
+                            <li class="{{ request()->is('master/products*') ? 'active' : '' }}">
+                                <a href="{{ route('master.product.index') }}">Produk</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcanany
+                @canany(['read-role', 'read-permission'])
+                    <li class="has-sub {{ request()->is('settings/*') ? 'active' : '' }}">
+                        <a class="js-arrow {{ request()->is('settings/*') ? 'open' : '' }}" href="#">
+                            <i class="fa-solid fa-gear"></i>
+                            Pengaturan
+                        </a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list"
+                            style="{{ request()->is('settings/*') ? 'display:block;' : 'display:none;' }}">
 
-                        <li class="{{ request()->is('master/user*') ? 'active' : '' }}">
-                            <a href="{{ route('master.user.index') }}">User</a>
-                        </li>
-                        <li class="{{ request()->is('master/brands*') ? 'active' : '' }}">
-                            <a href="{{ route('master.brand.index') }}">Merek</a>
-                        </li>
-                        <li class="{{ request()->is('master/categories*') ? 'active' : '' }}">
-                            <a href="{{ route('master.category.index') }}">Kategori</a>
-                        </li>
-                        <li class="{{ request()->is('master/units*') ? 'active' : '' }}">
-                            <a href="{{ route('master.unit.index') }}">Satuan</a>
-                        </li>
-                        <li class="{{ request()->is('master/products*') ? 'active' : '' }}">
-                            <a href="{{ route('master.product.index') }}">Produk</a>
-                        </li>
-                    </ul>
-                </li>
+                            @canany(['read-role', 'read-permission'])
+                                <li class="{{ request()->is('settings/group-users*') ? 'active' : '' }}">
+                                    <a href="{{ route('settings.group_user.index') }}">Grup User</a>
+                                </li>
+                            @endcanany
+                        </ul>
+                    </li>
+                @endcanany
             </ul>
         </nav>
     </div>

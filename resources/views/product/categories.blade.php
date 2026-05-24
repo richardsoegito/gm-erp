@@ -278,12 +278,12 @@
 
         const STATUS = {
             active: {
-                label: 'Active',
+                label: 'Aktif',
                 cls: 'status--process'
             },
 
             inactive: {
-                label: 'Inactive',
+                label: 'Tidak Aktif',
                 cls: 'status--denied'
             },
         };

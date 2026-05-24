@@ -23,9 +23,6 @@
 
     <!-- Bootstrap CSS-->
     <link href="{{ asset('assets/vendor/bootstrap-5.3.8.min.css') }}" rel="stylesheet" media="all">
-
-    <!-- Vendor CSS-->
-    <link href="{{ asset('vendor/css-hamburgers/hamburgers.min.css') }}" rel="stylesheet" media="all">
     
     <!-- Main CSS-->
     <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" media="all">
