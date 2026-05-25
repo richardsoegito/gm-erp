@@ -161,10 +161,12 @@
                 </div>
 
                 {{-- Deskripsi Produk --}}
-                <div class="description-section">
-                    <h3>Deskripsi Produk</h3>
-                    <div class="description-content">{!! $product->description ? nl2br(e($product->description)) : "<p style='color: var(--text-muted); font-size: 0.95rem; font-style: italic; margin-bottom: 25px;'>Tidak ada deskripsi untuk produk ini. </p>" !!}</div>
-                </div>
+                @if ($product->description)
+                    <div class="description-section">
+                        <h3>Deskripsi Produk</h3>
+                        <div class="description-content">{!! $product->description ? nl2br(e($product->description)) : "<p style='color: var(--text-muted); font-size: 0.95rem; font-style: italic; margin-bottom: 25px;'>Tidak ada deskripsi untuk produk ini. </p>" !!}</div>
+                    </div>
+                @endif
 
                 {{-- Tombol Hubungi --}}
                 <div style="margin-top: 30px;">
