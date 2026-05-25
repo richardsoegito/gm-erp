@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('assets/css/catalog-2.css?v=') . time() }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/catalog.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/catalog.css?v=') . time() }}">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

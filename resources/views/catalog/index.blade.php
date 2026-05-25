@@ -138,7 +138,7 @@
             {{-- Section Header --}}
             <div class="section-heading" data-aos="fade-right" data-aos-delay="200">
                 <h2>Katalog Produk</h2>
-                <p class="section-subtitle">Koleksi terbaik dari Gunung Mas untuk Anda</p>
+                {{-- <p class="section-subtitle">Koleksi terbaik dari Gunung Mas untuk Anda</p> --}}
             </div>
 
             {{-- Product Grid --}}
