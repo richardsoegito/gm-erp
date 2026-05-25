@@ -123,7 +123,7 @@
                 @forelse ($products as $product)
                     <a href="{{ route('catalog.show', $product->slug) }}" class="product-card" data-aos="fade-up">
                         <div class="product-image-wrap">
-                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" style="width: 100%; height: 200px; object-fit: contain;">
+                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}">
                         </div>
                         <div class="product-content">
                             <div class="product-meta">
