@@ -64,7 +64,7 @@ class ProductBrandController extends Controller
             ProductBrand::create([
                 'uuid' => Str::uuid(),
                 'id' => $this->generateBrandId(),
-                'name' => $validated['name'],
+                'name' => Str::upper($validated['name']),
                 'description' => $validated['description'] ?? null,
                 'status' => $request->has('status') ? 1 : 0,
                 'created_by' => auth()->id(),
@@ -119,7 +119,7 @@ class ProductBrandController extends Controller
         */
 
         $brand->update([
-            'name' => $validated['name'],
+            'name' => Str::upper($validated['name']),
             'description' => $validated['description'] ?? null,
             'status' => $request->has('status') ? 1 : 0,
             'updated_by' => auth()->id()

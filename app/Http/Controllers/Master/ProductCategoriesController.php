@@ -64,7 +64,7 @@ class ProductCategoriesController extends Controller
             ProductCategories::create([
                 'uuid' => Str::uuid(),
                 'id' => $this->generateCategoryId(),
-                'name' => $validated['name'],
+                'name' => Str::upper($validated['name']),
                 'description' => $validated['description'] ?? null,
                 'status' => $request->has('status') ? 1 : 0,
                 'created_by' => auth()->id(),
@@ -124,7 +124,7 @@ class ProductCategoriesController extends Controller
         */
 
         $category->update([
-            'name' => $validated['name'],
+            'name' => Str::upper($validated['name']),
             'description' => $validated['description'] ?? null,
             'status' => $request->has('status') ? 1 : 0,
             'updated_by' => auth()->id()

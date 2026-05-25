@@ -81,7 +81,7 @@
 </aside> --}}
 <aside class="menu-sidebar" id="main-sidebar">
     <div class="logo">
-        <a href="index.html" class="logo-link" aria-label="CoolAdmin home">
+        <a href="{{ route('master.product.index') }}" class="logo-link" aria-label="CoolAdmin home">
             <span class="logo-mark" aria-hidden="true">GM</span>
             <span class="logo-text">GUNUNG MAS</span>
         </a>
@@ -96,7 +96,7 @@
                     <a href="{{ url('/') }}"><i class="fa-solid fa-tachometer-alt"></i>Dashboard</a>
                 </li> --}}
                 <li>
-                    <a href="{{ url('catalog') }}">
+                    <a href="{{ url('/') }}">
                         <i class="fa-regular fa-image"></i>
                         Catalog
                     </a>

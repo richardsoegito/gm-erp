@@ -18,7 +18,17 @@ class CatalogController extends Controller
 
         // Filter Pencarian (Search)
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $search = $request->search;
+
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                ->orWhereHas('brand', function ($brand) use ($search) {
+                    $brand->where('name', 'like', '%' . $search . '%');
+                })
+                ->orWhereHas('category', function ($category) use ($search) {
+                    $category->where('name', 'like', '%' . $search . '%');
+                });
+            });
         }
 
         // Filter Kategori
