@@ -115,7 +115,7 @@
 
             {{-- Kanan: Informasi Produk --}}
             <div class="product-info">
-                <h1 class="product-title">{{ $product->name }}</h1>
+                <p class="product-title-detail">{{ $product->name }}</p>
                 
                 <div class="product-meta-grid">
                     <span class="meta-label">Kategori</span>
@@ -168,7 +168,7 @@
 
                 {{-- Tombol Hubungi --}}
                 <div style="margin-top: 30px;">
-                    <a href="https://wa.me/628123456789?text=Halo,%20saya%20tertarik%20dengan%20produk%20{{ urlencode($product->name) }}" class="search-btn" style="display: inline-block; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: 600; background-color: #03AC0E; color: white;">
+                    <a href="https://wa.me/08123456789?text=Halo,%20saya%20tertarik%20dengan%20produk%20{{ urlencode($product->name) }}" class="search-btn" style="display: inline-block; padding: 10px 20px; text-decoration: none; border-radius: 8px; font-weight: 600; background-color: #03AC0E; color: white;">
                         <i class="fa-brands fa-whatsapp"></i>
                         Hubungi via WhatsApp
                     </a>

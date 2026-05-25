@@ -201,6 +201,19 @@ a {
     gap: 10px;
 }
 
+/* .filter-search {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    align-items: center;
+    background: var(--bg-body);
+    border-radius: 10px;
+    padding: 0 15px;
+    border: 1px solid transparent;
+    transition: border 0.3s ease;
+} */
+
+/* Biarkan filter-search tetap seperti ini */
 .filter-search {
     flex: 1;
     min-width: 250px;
@@ -211,6 +224,7 @@ a {
     padding: 0 15px;
     border: 1px solid transparent;
     transition: border 0.3s ease;
+    min-height: 48px; /* Pastikan ada min-height agar stabil */
 }
 
 .filter-search:focus-within {
@@ -232,11 +246,18 @@ a {
     outline: none;
 }
 
-.filter-select-wrapper {
+/* .filter-select-wrapper {
     min-width: 200px;
     background: var(--bg-body);
     border-radius: 10px;
     padding: 0 15px;
+} */
+
+/* Wrapper hanya untuk mengatur tata letak/lebar, hilangkan gaya visualnya */
+.filter-select-wrapper {
+    min-width: 200px;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .filter-select {
@@ -379,7 +400,7 @@ a {
 }
 
 .product-title {
-    font-size: 0.85rem;
+    font-size: 2rem;
     font-weight: 600;
     color: var(--text-main);
     line-height: 1.4;
@@ -407,6 +428,11 @@ a {
     list-style: none;
     padding: 0;
 }
+
+.pagination-wrapper {
+    margin-top: 20px;
+}
+
 .pagination li .page-link {
     background: var(--bg-card);
     color: var(--text-main);
@@ -511,7 +537,7 @@ a {
     grid-template-columns: 350px 1fr;
     gap: 40px;
     background: var(--bg-card); 
-    padding: 30px;
+    padding: 20px;
     border-radius: 12px;
     box-shadow: var(--shadow-md);
     border: 1px solid var(--border-color);
@@ -659,7 +685,7 @@ a {
 
     /* Memastikan product-container punya jarak aman di kiri-kanan pada layar kecil */
     .product-container {
-        margin: 0 20px; /* Memberi jarak antara card dengan tepi layar */
+        margin: 0 10px; /* Memberi jarak antara card dengan tepi layar */
         padding: 20px;  /* Mengurangi padding di dalam card agar konten tidak terlalu sesak */
     }
 
@@ -683,4 +709,102 @@ a {
     .variant-section h3 {
         font-size: 1rem !important;
     }
+
+    .ts-wrapper .ts-control {
+        min-height: 48px;
+    }
 }
+
+/* 2. KOTAK INPUT TOM SELECT (Kontrol visual identik dengan .filter-search) */
+.ts-wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.ts-wrapper .ts-control {
+    background: var(--bg-body);       /* Pakai variabel tema kamu */
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--text-main);          /* Pakai variabel warna teks kamu */
+    
+    /* Atur tinggi agar sama persis dengan kotak pencarian sebelahnya */
+    min-height: 55px;                 
+    padding: 0 15px;                  
+    
+    display: flex;
+    align-items: center;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+/* 3. WARNA TEKS KETIKAN & PLACEHOLDER */
+.ts-wrapper .ts-control input {
+    color: var(--text-main) !important;
+}
+.ts-wrapper .ts-control input::placeholder {
+    color: #6c757d !important;
+}
+
+/* 4. KOTAK DROPDOWN LIST (Diperbarui untuk Pelurusan) */
+.ts-dropdown {
+    background-color: var(--bg-body, #151a2e) !important;
+    border: 1px solid var(--border-color, #2b3553) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+    z-index: 99999 !important;
+    overflow: hidden !important;
+    
+    /* KUNCI PELURUSAN: Memaksa margin atas 5px, kanan 0, bawah 0, kiri 0 */
+    margin: 5px 0 0 -15px !important; 
+    
+    /* Memastikan perhitungan lebar border tidak menggeser kotak */
+    box-sizing: border-box !important; 
+}
+
+/* Tambahan: Memberi sedikit jarak di atas/bawah list agar tidak mepet garis */
+.ts-dropdown .ts-dropdown-content {
+    padding: 6px 0 !important;
+}
+
+/* 5. ITEM DROPDOWN */
+.ts-dropdown .option {
+    padding: 10px 15px !important;
+    color: var(--text-main, #ffffff) !important;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* 6. EFEK HOVER ITEM */
+.ts-dropdown .option.active,
+.ts-dropdown .option:hover {
+    background-color: #3b82f6 !important; /* Warna biru highlight */
+    color: #ffffff !important;
+}
+
+/* (Opsional) Memperbaiki warna teks yang diketik agar tetap putih */
+.ts-dropdown .option [data-ts-item] {
+    color: #ffffff !important;
+}
+
+/* 7. MEMPERBAIKI BORDER KETIKA FOKUS */
+.ts-wrapper.focus .ts-control {
+    border-color: #3b82f6; /* Warna biru saat diklik, samakan dengan efek hover */
+    box-shadow: none;
+}
+
+/* Target: iPad dan Tablet (Landscape) */
+/* @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    .ts-dropdown
+    {
+        margin: 5px 0 0 0;
+    }
+} */
+
+/* Target: iPad Pro (Landscape) */
+/* @media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (orientation: landscape) {
+    
+    .ts-dropdown
+    {
+        margin: 5px 0 0 50px;
+    } 
+} */

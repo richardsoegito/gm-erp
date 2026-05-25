@@ -692,7 +692,7 @@ class ProductController extends Controller
             'brand_id'         => 'required|exists:product_brands,id',
             'category_id'      => 'required|exists:product_categories,id',
             'large_unit_id'    => 'required|exists:product_units,id',
-            'small_unit_id'    => 'required|exists:product_units,id',
+            'small_unit_id'    => 'nullable|exists:product_units,id',
             'description'      => 'nullable|string',
             'meta_title'       => 'nullable|string|max:255',
             'meta_description' => 'nullable|string',

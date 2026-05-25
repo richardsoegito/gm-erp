@@ -17,6 +17,8 @@ Route::get('/cool', function () {
 Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
+Route::get('/search-categories', [CatalogController::class, 'searchCategories'])->name('catalog.search.categories');
+Route::get('/search-brands', [CatalogController::class, 'searchBrands'])->name('catalog.search.brands');
 
 Route::middleware('guest')->controller(AuthController::class)->group(function () {
 

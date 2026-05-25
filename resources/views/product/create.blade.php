@@ -79,11 +79,11 @@
                         @enderror
                     </div>
 
-                    {{-- Satuan Besar --}}
+                    {{-- Satuan --}}
                     <div class="col-md-3 mb-3">
-                        <label>Satuan Besar<span class="text-danger">*</span></label>
+                        <label>Satuan<span class="text-danger">*</span></label>
                         <select name="large_unit_id" id="large_unit_id">
-                            <option value="">Pilih Satuan Besar</option>
+                            <option value="">Pilih Satuan</option>
                             @foreach ($units as $unit)
                                 <option value="{{ $unit->id }}"
                                     {{ ($editing ? old('large_unit_id', $product->large_unit_id) : old('large_unit_id')) == $unit->id ? 'selected' : '' }}>
@@ -98,7 +98,7 @@
 
                     {{-- Satuan Kecil --}}
                     <div class="col-md-3 mb-3">
-                        <label>Satuan Kecil<span class="text-danger">*</span></label>
+                        <label>Satuan Kecil</label>
                         <select name="small_unit_id" id="small_unit_id">
                             <option value="">Pilih Satuan Kecil</option>
                             @foreach ($units as $unit)
@@ -166,7 +166,7 @@
 
                                     {{-- Qty Konversi (Dinamic Label) --}}
                                     <div class="col-md-4">
-                                        <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan Besar (Satuan Kecil)</label>
+                                        <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan (Satuan Kecil)</label>
                                         <input type="number" name="box_qty[]" class="form-control form-control-sm"
                                             value="{{ $v->box_qty }}">
                                     </div>
@@ -195,7 +195,7 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan Besar (Satuan Kecil)</label>
+                                    <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan (Satuan Kecil)</label>
                                     <input type="number" name="box_qty[]" class="form-control form-control-sm">
                                 </div>
 
@@ -537,7 +537,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
-    | DYNAMIC VARIANT LABELS (Satuan Besar & Kecil)
+    | DYNAMIC VARIANT LABELS (Satuan & Kecil)
     |--------------------------------------------------------------------------
     */
     function updateVariantLabels() {
@@ -546,7 +546,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         let largeText = (largeSelect && largeSelect.selectedIndex > 0) 
             ? largeSelect.options[largeSelect.selectedIndex].text 
-            : 'Satuan Besar';
+            : 'Satuan';
             
         let smallText = (smallSelect && smallSelect.selectedIndex > 0) 
             ? smallSelect.options[smallSelect.selectedIndex].text 
@@ -647,10 +647,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
+    | FUNGSI: HITUNG ULANG URUTAN GAMBAR
+    |--------------------------------------------------------------------------
+    */
+    function updateSortOrders() {
+        // Ambil semua input urutan, baik gambar dari database (existing) maupun gambar baru
+        const sortInputs = document.querySelectorAll(
+            '#image-wrapper input[name="sort_order[]"], #image-wrapper input[name="existing_sort_orders[]"]'
+        );
+        
+        let currentIndex = 1; // Set urutan dimulai dari 1
+        
+        sortInputs.forEach(input => {
+            const item = input.closest('.image-item');
+            // Hanya hitung item yang TIDAK disembunyikan (tidak dihapus)
+            if (item && !item.classList.contains('d-none') && item.style.display !== 'none') {
+                input.value = currentIndex;
+                currentIndex++; // Tambah angka untuk elemen berikutnya
+            }
+        });
+    }
+
+    /*
+    |--------------------------------------------------------------------------
     | TEMPLATE : IMAGE ROW
     |--------------------------------------------------------------------------
     */
     function imageRowHTML() {
+        // Value input sort_order bisa dikosongkan karena akan otomatis diisi oleh updateSortOrders()
         return `
             <div class="border rounded p-3 mb-3 image-item">
                 <div class="row align-items-start g-3">
@@ -679,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label mb-1">Urutan</label>
-                                <input type="number" name="sort_order[]" value="0" min="0"
+                                <input type="number" name="sort_order[]" min="1"
                                     class="form-control form-control-sm">
                             </div>
                         </div>
@@ -696,13 +720,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /*
     |--------------------------------------------------------------------------
+    | EVENT LISTENERS (TAMBAH & HAPUS)
+    |--------------------------------------------------------------------------
+    */
+    const imageWrapper = document.getElementById('image-wrapper');
+    const addImageBtn = document.getElementById('add-image');
+
+    // 2. Saat tombol Hapus ditekan (Menggunakan Event Delegation)
+    if (imageWrapper) {
+        imageWrapper.addEventListener('click', function(e) {
+            
+            // Kasus A: Menghapus baris gambar BARU (langsung buang elemen dari HTML)
+            if (e.target.closest('.btn-remove-image')) {
+                e.target.closest('.image-item').remove();
+                updateSortOrders(); // Hitung ulang supaya angkanya merapat
+            }
+            
+            // Kasus B: Menghapus baris gambar EXISTING (sembunyikan elemen, centang checkbox delete)
+            if (e.target.closest('.btn-remove-existing-image')) {
+                const btn = e.target.closest('.btn-remove-existing-image');
+                const item = btn.closest('.image-item');
+                
+                // Cari checkbox hidden dan jadikan checked
+                const checkbox = item.querySelector('.deleted-image-checkbox');
+                if (checkbox) checkbox.checked = true;
+                
+                // Sembunyikan div-nya (jangan dihapus agar id tetap terkirim ke backend untuk proses delete DB)
+                item.classList.add('d-none');
+                
+                updateSortOrders(); // Hitung ulang supaya angkanya merapat mengabaikan yang tersembunyi
+            }
+        });
+    }
+
+    updateSortOrders();
+
+    /*
+    |--------------------------------------------------------------------------
     | TEMPLATE : VARIANT ROW
     |--------------------------------------------------------------------------
     */
     function variantRowHTML() {
         const largeSelect = document.getElementById('large_unit_id');
         const smallSelect = document.getElementById('small_unit_id');
-        let largeText = (largeSelect && largeSelect.selectedIndex > 0) ? largeSelect.options[largeSelect.selectedIndex].text : 'Satuan Besar';
+        let largeText = (largeSelect && largeSelect.selectedIndex > 0) ? largeSelect.options[largeSelect.selectedIndex].text : 'Satuan';
         let smallText = (smallSelect && smallSelect.selectedIndex > 0) ? smallSelect.options[smallSelect.selectedIndex].text : 'Satuan Kecil';
         
         return `
@@ -732,10 +793,10 @@ document.addEventListener('DOMContentLoaded', () => {
     | ADD IMAGE & VARIANT
     |--------------------------------------------------------------------------
     */
-    const addImageBtn = document.getElementById('add-image');
     if (addImageBtn) {
         addImageBtn.addEventListener('click', () => {
             document.getElementById('image-wrapper').insertAdjacentHTML('beforeend', imageRowHTML());
+            updateSortOrders()
         });
     }
 

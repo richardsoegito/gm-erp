@@ -64,7 +64,7 @@ class ProductUnitController extends Controller
             ProductUnit::create([
                 'uuid' => Str::uuid(),
                 'id' => $this->generateUnitId(),
-                'name' => $validated['name'],
+                'name' => Str::upper($validated['name']),
                 'description' => $validated['description'] ?? null,
                 'status' => $request->has('status') ? 1 : 0,
                 'created_by' => auth()->id(),
@@ -114,7 +114,7 @@ class ProductUnitController extends Controller
         ]);
 
         $unit->update([
-            'name' => $validated['name'],
+            'name' => Str::upper($validated['name']),
             'description' => $validated['description'] ?? null,
             'status' => $request->has('status') ? 1 : 0,
             'updated_by' => auth()->id()

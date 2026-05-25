@@ -42,7 +42,7 @@ class CatalogController extends Controller
         }
 
         // Ambil data dengan pagination dan pertahankan parameter URL (withQueryString)
-        $products = $query->latest()->paginate(12)->withQueryString();
+        $products = $query->orderBy('name', 'asc')->paginate(12)->withQueryString();
 
         // Ambil data kategori dan brand untuk dropdown filter
         // Disarankan pakai orderBy agar urutan di dropdown rapi sesuai abjad
@@ -50,6 +50,33 @@ class CatalogController extends Controller
         $brands = ProductBrand::where('status', 1)->orderBy('name', 'asc')->get(); 
 
         return view('catalog.index', compact('products', 'categories', 'brands'));
+    }
+
+    public function searchCategories(Request $request)
+    {
+        $search = $request->get('q');
+        // Cari data yang namanya mengandung huruf yang diketik, batasi 20 agar sangat ringan
+        $categories = ProductCategories::select('id', 'name')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->limit(20) 
+            ->get();
+
+        return response()->json($categories);
+    }
+
+    public function searchBrands(Request $request)
+    {
+        $search = $request->get('q');
+        $brands = ProductBrand::select('id', 'name')
+            ->when($search, function ($query, $search) {
+                return $query->where('name', 'like', "%{$search}%");
+            })
+            ->limit(20)
+            ->get();
+
+        return response()->json($brands);
     }
 
     public function show($slug)
