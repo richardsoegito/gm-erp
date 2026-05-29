@@ -124,7 +124,7 @@
                     <span class="meta-label">Brand</span>
                     <span class="meta-value">{{ $product->brand->name ?? '-' }}</span>
                     
-                    <span class="meta-label">Satuan Besar</span>
+                    <span class="meta-label">Satuan</span>
                     <span class="meta-value">{{ $product->largeUnit->name ?? '-' }}</span>
                     
                     <span class="meta-label">Satuan Kecil</span>
