@@ -16,9 +16,9 @@ class CatalogController extends Controller
             ->with(['brand', 'category', 'variants', 'images'])
             ->where('status', true); // Hanya tampilkan produk aktif
 
-        // Filter Pencarian (Search)
+        // 1. Filter Pencarian Global (Search)
         if ($request->filled('search')) {
-            $search = $request->search;
+            $search = $request->search; // Definisikan di sini khusus scope ini
 
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
@@ -31,13 +31,17 @@ class CatalogController extends Controller
             });
         }
 
-        // Filter Kategori
+        // 2. Filter Kategori
         if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
+            // Karena TomSelect mengirimkan 'id', langsung tembak foreign key-nya
+            // Pastikan nama kolom disesuaikan, misalnya 'category_id'
+            $query->where('category_id', $request->category); 
         }
 
-        // Filter Brand (Tambahan Baru)
+        // 3. Filter Brand
         if ($request->filled('brand')) {
+            // HARUS pakai ->where() agar tidak merusak filter status=true
+            // Sama seperti kategori, langsung tembak foreign key-nya
             $query->where('brand_id', $request->brand);
         }
 
@@ -45,7 +49,6 @@ class CatalogController extends Controller
         $products = $query->orderBy('name', 'asc')->paginate(12)->withQueryString();
 
         // Ambil data kategori dan brand untuk dropdown filter
-        // Disarankan pakai orderBy agar urutan di dropdown rapi sesuai abjad
         $categories = ProductCategories::where('status', 1)->orderBy('name', 'asc')->get();
         $brands = ProductBrand::where('status', 1)->orderBy('name', 'asc')->get(); 
 

@@ -9,7 +9,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <link rel="stylesheet" href="{{ asset('assets/css/catalog-2.css?v=') . time() }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/catalog.css?v=') . time() }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/css/catalog.css?v=') . time() }}"> --}}
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -65,7 +65,7 @@
         <nav aria-label="breadcrumb" class="breadcrumb-container" data-aos="fade-right">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="{{ route("catalog.index") }}"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Katalog Produk</a>
+                    <a href="{{ url('/') }}"><i class="fa-solid fa-house" style="margin-right: 5px;"></i>Katalog Produk</a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">{{ $product->name }}</li>
             </ul>
@@ -119,7 +119,11 @@
                 
                 <div class="product-meta-grid">
                     <span class="meta-label">Kategori</span>
-                    <span class="meta-value"><a href="#">{{ $product->category->name ?? '-' }}</a></span>
+                    <span class="meta-value">
+                        <a href="{{ isset($product->category) ? url('/?category=' . $product->category->id) : '#' }}">
+                            {{ $product->category->name ?? '-' }}
+                        </a>
+                    </span>
                     
                     <span class="meta-label">Brand</span>
                     <span class="meta-value">{{ $product->brand->name ?? '-' }}</span>

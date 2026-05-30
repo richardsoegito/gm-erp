@@ -132,10 +132,14 @@ a {
     text-decoration: none !important;
 }
 
+.brand:hover {
+    color:inherit;
+}
+
 .brand-icon {
     width: 45px;
     height: 45px;
-    background: linear-gradient(135deg, var(--primary), #8b5cf6);
+    /* background: linear-gradient(135deg, var(--primary), #8b5cf6); */
     color: white;
     border-radius: 12px;
     display: flex;
@@ -150,6 +154,7 @@ a {
     font-size: 1.25rem;
     font-weight: 700;
     line-height: 1.2;
+    text-decoration: none !important;
 }
 
 .brand-caption {
@@ -608,6 +613,14 @@ a {
     line-height: 1.4;
 }
 
+.product-title-detail {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-main); 
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
 .product-meta-grid {
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -675,6 +688,10 @@ a {
     .gallery-main {
         max-width: 400px;
         margin: 0 auto 15px auto;
+    }
+
+    .product-title-detail {
+        font-size: 1.5rem;
     }
 }
 
