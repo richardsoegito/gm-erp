@@ -10,15 +10,11 @@ use App\Http\Controllers\Master\ProductController;
 use App\Http\Controllers\CatalogController;
 Use App\Http\Controllers\Settings\GroupUsersController;
 
-Route::get('/cool', function () {
-    return view('dashboard.indexcool');
-});
-
 // Route::get('catalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/search-categories', [CatalogController::class, 'searchCategories'])->name('catalog.search.categories');
 Route::get('/search-brands', [CatalogController::class, 'searchBrands'])->name('catalog.search.brands');
-Route::get('/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
+Route::get('/catalog/{product:slug}', [CatalogController::class, 'show'])->name('catalog.show');
 
 Route::middleware('guest')->controller(AuthController::class)->group(function () {
 
