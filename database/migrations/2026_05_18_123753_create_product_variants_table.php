@@ -13,8 +13,9 @@ return new class extends Migration {
             $table->string('product_id', 20);
 
             $table->string('size'); 
-            $table->integer('box_qty')->nullable();
-            $table->integer('carton_qty')->nullable();
+            
+            $table->decimal('large_unit_qty', 15, 4)->nullable();
+            $table->decimal('small_unit_qty', 15, 4)->nullable();
 
             $table->boolean('status')->default(1);
 

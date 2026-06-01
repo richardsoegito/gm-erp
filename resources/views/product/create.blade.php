@@ -1,7 +1,18 @@
 @extends('layouts.app')
 
 @section('title', $editing ? 'Ubah Produk' : 'Tambah Produk')
+@section('styles')
+    <style>
+        /* Warna latar belakang untuk baris ganjil (1, 3, 5, dst) */
+        #variant-wrapper .variant-item:nth-child(odd) {
+            background-color: #ffffff; 
+        }
 
+        #variant-wrapper .variant-item:nth-child(even) {
+            background-color: #f1f3f5; /* Warna abu-abu sangat muda (standar Bootstrap) */
+        }
+    </style>
+@endsection
 @section('content')
 
 <form id="product-form" action="{{ $editing ? route('master.product.update', $product) : route('master.product.store') }}" method="POST" enctype="multipart/form-data">
@@ -81,11 +92,11 @@
 
                     {{-- Satuan --}}
                     <div class="col-md-3 mb-3">
-                        <label>Satuan<span class="text-danger">*</span></label>
+                        <label>Satuan Besar<span class="text-danger">*</span></label>
                         <select name="large_unit_id" id="large_unit_id">
                             <option value="">Pilih Satuan</option>
                             @foreach ($units as $unit)
-                                <option value="{{ $unit->id }}"
+                                <option value="{{ $unit->id }}" data-decimal="{{ $unit->allow_decimal ? 1 : 0 }}"
                                     {{ ($editing ? old('large_unit_id', $product->large_unit_id) : old('large_unit_id')) == $unit->id ? 'selected' : '' }}>
                                     {{ $unit->name }}
                                 </option>
@@ -102,7 +113,7 @@
                         <select name="small_unit_id" id="small_unit_id">
                             <option value="">Pilih Satuan Kecil</option>
                             @foreach ($units as $unit)
-                                <option value="{{ $unit->id }}"
+                                <option value="{{ $unit->id }}" data-decimal="{{ $unit->allow_decimal ? 1 : 0 }}"
                                     {{ ($editing ? old('small_unit_id', $product->small_unit_id) : old('small_unit_id')) == $unit->id ? 'selected' : '' }}>
                                     {{ $unit->name }}
                                 </option>
@@ -148,31 +159,44 @@
             <div class="card-body">
 
                 <div id="variant-wrapper">
-
                     @if($editing && $product->variants->count())
                         @foreach($product->variants as $v)
-                            <div class="border rounded p-3 mb-3 variant-item">
-                                <div class="row g-2">
+                            <div class="border rounded p-3 mb-3 variant-item bg-light">
+                                <div class="row g-3 align-items-end">
                                     
                                     {{-- HIDDEN INPUT UNTUK ID VARIAN LAMA --}}
                                     <input type="hidden" name="variant_ids[]" value="{{ $v->id }}">
 
                                     {{-- Ukuran / Varian --}}
-                                    <div class="col-md-5">
-                                        <label>Nama Varian</label>
+                                    <div class="col-md-4 name-column">
+                                        <label class="form-label fw-semibold mb-1">Nama Varian</label>
                                         <input type="text" name="size[]" class="form-control form-control-sm"
-                                            value="{{ $v->size }}" placeholder="Contoh: Merah, XL, atau 500gr">
+                                            value="{{ old('size.' . $loop->index, $v->size) }}" placeholder="Contoh: Merah, XL, dll">
                                     </div>
 
-                                    {{-- Qty Konversi (Dinamic Label) --}}
-                                    <div class="col-md-4">
-                                        <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan (Satuan Kecil)</label>
-                                        <input type="number" name="box_qty[]" class="form-control form-control-sm"
-                                            value="{{ $v->box_qty }}">
+                                    {{-- Isi Colly --}}
+                                    <div class="col-md-3 large-unit-column">
+                                        <label class="form-label fw-semibold mb-1">Isi Colly</label>
+                                        {{-- flex-nowrap ditambahkan di sini --}}
+                                        <div class="input-group input-group-sm flex-nowrap">
+                                            <input type="text" name="large_qty[]" class="form-control autonumeric-qty"        value="{{ old('large_qty.' . $loop->index, number_format($v->large_unit_qty, 2, ',', '.')) }}">
+                                            <span class="input-group-text large-unit-name bg-white text-secondary">Satuan</span>
+                                        </div>
                                     </div>
 
-                                    <div class="col-md-3 d-flex justify-content-end align-items-end">
-                                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-variant">
+                                    {{-- Isi Pack / Box --}}
+                                    <div class="col-md-3 small-unit-column d-none">
+                                        <label class="form-label fw-semibold mb-1">Isi Pack / Box</label>
+                                        {{-- flex-nowrap ditambahkan di sini --}}
+                                        <div class="input-group input-group-sm flex-nowrap">
+                                            <input type="text" name="small_qty[]" class="form-control autonumeric-qty"        value="{{ old('small_qty.' . $loop->index, number_format($v->small_unit_qty, 2, ',', '.')) }}">
+                                            <span class="input-group-text small-unit-name bg-white text-secondary">Satuan</span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Tombol Hapus --}}
+                                    <div class="col-md-2">
+                                        <button type="button" class="btn btn-sm btn-outline-danger w-100 btn-remove-variant">
                                             &times; Hapus
                                         </button>
                                     </div>
@@ -182,32 +206,43 @@
                         @endforeach
                     @else
                         {{-- default row --}}
-                        <div class="border rounded p-3 mb-3 variant-item">
-                            <div class="row g-2">
+                        <div class="border rounded p-3 mb-3 variant-item bg-light">
+                            <div class="row g-3 align-items-end">
                                 
                                 {{-- HIDDEN INPUT KOSONG UNTUK VARIAN BARU --}}
                                 <input type="hidden" name="variant_ids[]" value="">
 
-                                <div class="col-md-5">
-                                    <label>Nama Varian</label>
+                                <div class="col-md-4 name-column">
+                                    <label class="form-label fw-semibold mb-1">Nama Varian</label>
                                     <input type="text" name="size[]" class="form-control form-control-sm"
-                                        placeholder="Contoh: Merah, XL, atau 500gr">
+                                        placeholder="Contoh: Merah, XL, dll" value="{{ old('size.0') }}">
                                 </div>
 
-                                <div class="col-md-4">
-                                    <label class="dynamic-qty-label fw-bold">Jumlah Per Satuan (Satuan Kecil)</label>
-                                    <input type="number" name="box_qty[]" class="form-control form-control-sm">
+                                <div class="col-md-3 large-unit-column">
+                                    <label class="form-label fw-semibold mb-1">Isi Colly</label>
+                                    <div class="input-group input-group-sm flex-nowrap">
+                                        <input type="text" name="large_qty[]" class="form-control autonumeric-qty" value="{{ old('large_qty.0') }}">
+                                        <span class="input-group-text large-unit-name bg-white text-secondary">Satuan</span>
+                                    </div>
                                 </div>
 
-                                <div class="col-md-3 d-flex justify-content-end align-items-end">
-                                    <button type="button" class="btn btn-sm btn-outline-danger btn-remove-variant">
+                                <div class="col-md-3 small-unit-column d-none">
+                                    <label class="form-label fw-semibold mb-1">Isi Pack / Box</label>
+                                    <div class="input-group input-group-sm flex-nowrap">
+                                        <input type="text" name="small_qty[]" class="form-control autonumeric-qty" value="{{ old('small_qty.0') }}">>
+                                        <span class="input-group-text small-unit-name bg-white text-secondary">Satuan</span>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-sm btn-outline-danger w-100 btn-remove-variant">
                                         &times; Hapus
                                     </button>
                                 </div>
+                                
                             </div>
                         </div>
                     @endif
-
                 </div>
 
                 <div class="button-tambah d-flex justify-content-end">
@@ -521,93 +556,503 @@
 @endsection
 
 @section('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.8.1"></script>
+<script>    
+    document.addEventListener('DOMContentLoaded', () => {
+        function initAutoNumeric() {
+            const largeSelect = document.getElementById('large_unit_id');
+            const smallSelect = document.getElementById('small_unit_id');
 
-    /*
-    |--------------------------------------------------------------------------
-    | TOM SELECT
-    |--------------------------------------------------------------------------
-    */
-    ['#brand_id', '#category_id', '#large_unit_id', '#small_unit_id'].forEach(selector => {
-        if (document.querySelector(selector)) {
-            new TomSelect(selector);
+            const largeAllowDecimal =
+                largeSelect?.options[largeSelect.selectedIndex]
+                    ?.dataset.decimal === '1';
+
+            const smallAllowDecimal =
+                smallSelect?.options[smallSelect.selectedIndex]
+                    ?.dataset.decimal === '1';
+
+            document.querySelectorAll('input[name="large_qty[]"]')
+                .forEach(input => {
+
+                    if (!AutoNumeric.getAutoNumericElement(input)) {
+
+                        new AutoNumeric(input, {
+                            digitGroupSeparator: '.',
+                            decimalCharacter: ',',
+                            decimalPlaces: largeAllowDecimal ? 2 : 0,
+                            decimalPlacesRawValue: 4,
+                            minimumValue: '0',
+                            unformatOnSubmit: true,
+                            modifyValueOnWheel: false
+                        });
+
+                    }
+
+                });
+
+            document.querySelectorAll('input[name="small_qty[]"]')
+                .forEach(input => {
+
+                    if (!AutoNumeric.getAutoNumericElement(input)) {
+
+                        new AutoNumeric(input, {
+                            digitGroupSeparator: '.',
+                            decimalCharacter: ',',
+                            decimalPlaces: smallAllowDecimal ? 2 : 0,
+                            decimalPlacesRawValue: 4,
+                            minimumValue: '0',
+                            unformatOnSubmit: true,
+                            modifyValueOnWheel: false
+                        });
+
+                    }
+
+                });
         }
-    });
 
-    /*
-    |--------------------------------------------------------------------------
-    | DYNAMIC VARIANT LABELS (Satuan & Kecil)
-    |--------------------------------------------------------------------------
-    */
-    function updateVariantLabels() {
-        const largeSelect = document.getElementById('large_unit_id');
-        const smallSelect = document.getElementById('small_unit_id');
+        // AutoNumeric
+        initAutoNumeric()
+
+        /*
+        |--------------------------------------------------------------------------
+        | TOM SELECT
+        |--------------------------------------------------------------------------
+        */
+        const selects = [
+            '#brand_id',
+            '#category_id',
+            '#large_unit_id',
+            '#small_unit_id'
+        ];
+
+        selects.forEach(selector => {
+            const el = document.querySelector(selector);
+
+            if (el && !el.tomselect) {
+                new TomSelect(el);
+            }
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | DYNAMIC VARIANT LABELS (Satuan & Kecil)
+        |--------------------------------------------------------------------------
+        */
+        function updateVariantColumns() {
+            const largeSelect = document.getElementById('large_unit_id');
+            const smallSelect = document.getElementById('small_unit_id');
+
+            const largeUnit =
+                largeSelect && largeSelect.selectedIndex > 0
+                    ? largeSelect.options[largeSelect.selectedIndex].text
+                    : '';
+
+            const smallUnit =
+                smallSelect && smallSelect.selectedIndex > 0
+                    ? smallSelect.options[smallSelect.selectedIndex].text
+                    : '';
+
+            // 1. Update Satuan Besar (Sembunyikan kotak span jika kosong)
+            document.querySelectorAll('.large-unit-name').forEach(el => {
+                if (largeUnit) {
+                    el.textContent = largeUnit;
+                    el.classList.remove('d-none');
+                } else {
+                    el.classList.add('d-none');
+                }
+            });
+
+            // 2. Update Satuan Kecil & Sesuaikan Lebar Grid (Biar tetap sebaris penuh)
+            document.querySelectorAll('.small-unit-column').forEach(col => {
+                const smallUnitSpan = col.querySelector('.small-unit-name');
+                const row = col.closest('.row');
+                
+                // MENGGUNAKAN CLASS SELECTOR (Lebih aman daripada index children)
+                const nameCol = row.querySelector('.name-column'); 
+                const largeCol = row.querySelector('.large-unit-column');
+
+                // Proteksi jika elemen tidak ditemukan agar script tidak error
+                if (!nameCol || !largeCol) return;
+
+                if (smallUnit) {
+                    // JIKA ADA SATUAN KECIL: Tampilkan dan set grid ke (4 - 3 - 3 - 2)
+                    col.classList.remove('d-none');
+                    if (smallUnitSpan) {
+                        smallUnitSpan.textContent = smallUnit;
+                    }
+
+                    nameCol.classList.remove('col-md-6');
+                    nameCol.classList.add('col-md-4');
+
+                    largeCol.classList.remove('col-md-4');
+                    largeCol.classList.add('col-md-3');
+                } else {
+                    // JIKA TIDAK ADA SATUAN KECIL: Sembunyikan dan set grid ke (6 - 4 - 2) agar ruang penuh
+                    col.classList.add('d-none');
+
+                    nameCol.classList.remove('col-md-4');
+                    nameCol.classList.add('col-md-6');
+
+                    largeCol.classList.remove('col-md-3');
+                    largeCol.classList.add('col-md-4');
+                }
+            });
+        }
+
+        function updateDecimalMode() {
+            const largeSelect = document.getElementById('large_unit_id');
+            const smallSelect = document.getElementById('small_unit_id');
+
+            const largeAllowDecimal =
+                largeSelect?.options[largeSelect.selectedIndex]
+                    ?.dataset.decimal === '1';
+
+            const smallAllowDecimal =
+                smallSelect?.options[smallSelect.selectedIndex]
+                    ?.dataset.decimal === '1';
+
+            document.querySelectorAll('input[name="large_qty[]"]')
+                .forEach(input => {
+
+                    const an = AutoNumeric.getAutoNumericElement(input);
+
+                    if (!an) return;
+
+                    const rawValue = parseFloat(an.getNumericString() || 0);
+
+                    an.update({
+                        decimalPlaces: largeAllowDecimal ? 2 : 0
+                    });
+
+                    if (!largeAllowDecimal) {
+                        an.set(Math.floor(rawValue));
+                    }
+
+                });
+
+            document.querySelectorAll('input[name="small_qty[]"]')
+                .forEach(input => {
+
+                    const an = AutoNumeric.getAutoNumericElement(input);
+
+                    if (!an) return;
+
+                    const rawValue = parseFloat(an.getNumericString() || 0);
+
+                    an.update({
+                        decimalPlaces: smallAllowDecimal ? 2 : 0
+                    });
+
+                    if (!smallAllowDecimal) {
+                        an.set(Math.floor(rawValue));
+                    }
+
+                });
+        }
+
+        updateVariantColumns();
+        updateDecimalMode();
+
+
+        const largeSelectElem = document.getElementById('large_unit_id');
+        const smallSelectElem = document.getElementById('small_unit_id');
         
-        let largeText = (largeSelect && largeSelect.selectedIndex > 0) 
-            ? largeSelect.options[largeSelect.selectedIndex].text 
-            : 'Satuan';
+        largeSelectElem?.addEventListener('change', () => {
+            updateVariantColumns();
+            updateDecimalMode();
+        });
+        
+        smallSelectElem?.addEventListener('change', () => {
+            updateVariantColumns();
+            updateDecimalMode();
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | SLUG GENERATOR
+        |--------------------------------------------------------------------------
+        */
+        const nameInput = document.getElementById('name');
+        const slugInput = document.getElementById('slug');
+
+        if (nameInput && slugInput) {
+            nameInput.addEventListener('input', function () {
+                slugInput.value = this.value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^a-z0-9\s-]/g, '')
+                    .replace(/\s+/g, '-')
+                    .replace(/-+/g, '-');
+            });
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | PREVIEW THUMBNAIL
+        |--------------------------------------------------------------------------
+        */
+        const thumbnailInput = document.getElementById('thumbnail-input');
+
+        if (thumbnailInput) {
+            thumbnailInput.addEventListener('change', function () {
+                const preview     = document.getElementById('thumbnail-preview');
+                const placeholder = document.getElementById('thumbnail-placeholder');
+                const file        = this.files[0];
+
+                if (file && file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        preview.src = e.target.result;
+                        preview.classList.remove('d-none');
+                        placeholder.classList.add('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    preview.src = '';
+                    preview.classList.add('d-none');
+                    placeholder.classList.remove('d-none');
+                }
+            });
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | PREVIEW VIDEO
+        |--------------------------------------------------------------------------
+        */
+        const videoInput = document.getElementById('video-input');
+
+        if (videoInput) {
+            videoInput.addEventListener('change', function () {
+                const preview     = document.getElementById('video-preview');
+                const placeholder = document.getElementById('video-placeholder');
+                const file        = this.files[0];
+
+                if (file && file.type.startsWith('video/')) {
+                    preview.src = URL.createObjectURL(file);
+                    preview.classList.remove('d-none');
+                    placeholder.classList.add('d-none');
+                } else {
+                    preview.src = '';
+                    preview.classList.add('d-none');
+                    placeholder.classList.remove('d-none');
+                }
+            });
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | FUNGSI: HITUNG ULANG URUTAN GAMBAR
+        |--------------------------------------------------------------------------
+        */
+        function updateSortOrders() {
+            // Ambil semua input urutan, baik gambar dari database (existing) maupun gambar baru
+            const sortInputs = document.querySelectorAll(
+                '#image-wrapper input[name="sort_order[]"], #image-wrapper input[name="existing_sort_orders[]"]'
+            );
             
-        let smallText = (smallSelect && smallSelect.selectedIndex > 0) 
-            ? smallSelect.options[smallSelect.selectedIndex].text 
-            : 'Satuan Kecil';
+            let currentIndex = 1; // Set urutan dimulai dari 1
+            
+            sortInputs.forEach(input => {
+                const item = input.closest('.image-item');
+                // Hanya hitung item yang TIDAK disembunyikan (tidak dihapus)
+                if (item && !item.classList.contains('d-none') && item.style.display !== 'none') {
+                    input.value = currentIndex;
+                    currentIndex++; // Tambah angka untuk elemen berikutnya
+                }
+            });
+        }
 
-        const labels = document.querySelectorAll('.dynamic-qty-label');
-        labels.forEach(label => {
-            // Ditambahkan 'Jumlah Per' di sini
-            label.textContent = `Jumlah Per ${largeText} (${smallText})`;
-        });
-    }
+        /*
+        |--------------------------------------------------------------------------
+        | TEMPLATE : IMAGE ROW
+        |--------------------------------------------------------------------------
+        */
+        function imageRowHTML() {
+            // Value input sort_order bisa dikosongkan karena akan otomatis diisi oleh updateSortOrders()
+            return `
+                <div class="border rounded p-3 mb-3 image-item">
+                    <div class="row align-items-start g-3">
+                        <div class="col-md-2 d-flex align-items-center justify-content-center">
+                            <div class="image-preview-wrapper border rounded d-flex align-items-center justify-content-center bg-light"
+                                style="width:150px; height:100px; overflow:hidden;">
+                                <img class="image-preview d-none"
+                                    style="width:100%; height:100%; object-fit:cover;"
+                                    alt="Preview">
+                                <span class="image-preview-placeholder text-muted small text-center px-1">
+                                    Tanpa Gambar
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row g-2">
+                                <div class="col-12">
+                                    <label class="form-label mb-1">Nama / Label Gambar</label>
+                                    <input type="text" name="image_labels[]" class="form-control form-control-sm"
+                                        placeholder="Contoh: Tampak Depan, Detail, dll.">
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label mb-1">File Gambar</label>
+                                    <input type="file" name="images[]" class="form-control form-control-sm image-file-input"
+                                        accept="image/*">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label mb-1">Urutan</label>
+                                    <input type="number" name="sort_order[]" min="1"
+                                        class="form-control form-control-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto d-flex justify-content-end">
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-remove-image mt-4">
+                                &times; Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
 
-    updateVariantLabels();
+        /*
+        |--------------------------------------------------------------------------
+        | EVENT LISTENERS (TAMBAH & HAPUS)
+        |--------------------------------------------------------------------------
+        */
+        const imageWrapper = document.getElementById('image-wrapper');
+        const addImageBtn = document.getElementById('add-image');
 
-    const largeSelectElem = document.getElementById('large_unit_id');
-    const smallSelectElem = document.getElementById('small_unit_id');
-    
-    if (largeSelectElem) {
-        largeSelectElem.addEventListener('change', updateVariantLabels);
-    }
-    if (smallSelectElem) {
-        smallSelectElem.addEventListener('change', updateVariantLabels);
-    }
+        // 2. Saat tombol Hapus ditekan (Menggunakan Event Delegation)
+        if (imageWrapper) {
+            imageWrapper.addEventListener('click', function(e) {
+                
+                // Kasus A: Menghapus baris gambar BARU (langsung buang elemen dari HTML)
+                if (e.target.closest('.btn-remove-image')) {
+                    e.target.closest('.image-item').remove();
+                    updateSortOrders(); // Hitung ulang supaya angkanya merapat
+                }
+                
+                // Kasus B: Menghapus baris gambar EXISTING (sembunyikan elemen, centang checkbox delete)
+                if (e.target.closest('.btn-remove-existing-image')) {
+                    const btn = e.target.closest('.btn-remove-existing-image');
+                    const item = btn.closest('.image-item');
+                    
+                    // Cari checkbox hidden dan jadikan checked
+                    const checkbox = item.querySelector('.deleted-image-checkbox');
+                    if (checkbox) checkbox.checked = true;
+                    
+                    // Sembunyikan div-nya (jangan dihapus agar id tetap terkirim ke backend untuk proses delete DB)
+                    item.classList.add('d-none');
+                    
+                    updateSortOrders(); // Hitung ulang supaya angkanya merapat mengabaikan yang tersembunyi
+                }
+            });
+        }
 
-    /*
-    |--------------------------------------------------------------------------
-    | SLUG GENERATOR
-    |--------------------------------------------------------------------------
-    */
-    const nameInput = document.getElementById('name');
-    const slugInput = document.getElementById('slug');
+        updateSortOrders();
 
-    if (nameInput && slugInput) {
-        nameInput.addEventListener('input', function () {
-            slugInput.value = this.value
-                .toLowerCase()
-                .trim()
-                .replace(/[^a-z0-9\s-]/g, '')
-                .replace(/\s+/g, '-')
-                .replace(/-+/g, '-');
-        });
-    }
+        /*
+        |--------------------------------------------------------------------------
+        | TEMPLATE : VARIANT ROW
+        |--------------------------------------------------------------------------
+        */
+        function variantRowHTML() {
+            const largeSelect = document.getElementById('large_unit_id');
+            const smallSelect = document.getElementById('small_unit_id');
 
+            const largeText =
+                largeSelect && largeSelect.selectedIndex > 0
+                    ? largeSelect.options[largeSelect.selectedIndex].text
+                    : 'Colly';
 
-    /*
-    |--------------------------------------------------------------------------
-    | PREVIEW THUMBNAIL
-    |--------------------------------------------------------------------------
-    */
-    const thumbnailInput = document.getElementById('thumbnail-input');
+            const smallText =
+                smallSelect && smallSelect.selectedIndex > 0
+                    ? smallSelect.options[smallSelect.selectedIndex].text
+                    : '';
 
-    if (thumbnailInput) {
-        thumbnailInput.addEventListener('change', function () {
-            const preview     = document.getElementById('thumbnail-preview');
-            const placeholder = document.getElementById('thumbnail-placeholder');
-            const file        = this.files[0];
+            return `
+                <div class="border rounded p-3 mb-3 variant-item">
+                    <div class="row g-2">
+
+                        <input type="hidden" name="variant_ids[]" value="">
+
+                        <div class="col-md-5">
+                            <label>Nama Varian</label>
+                            <input type="text"
+                                name="size[]"
+                                class="form-control form-control-sm">
+                        </div>
+
+                        <div class="col-md-3 large-unit-column">
+                            <label class="large-unit-label fw-bold">
+                                Isi ${largeText}
+                            </label>
+                            <input type="text"
+                                name="large_qty[]"
+                                class="form-control form-control-sm autonumeric-qty">
+                        </div>
+
+                        <div class="col-md-3 small-unit-column ${smallText ? '' : 'd-none'}">
+                            <label class="small-unit-label fw-bold">
+                                Isi ${smallText}
+                            </label>
+                            <input type="text"
+                                name="small_qty[]"
+                                class="form-control form-control-sm autonumeric-qty">
+                        </div>
+
+                        <div class="col-md-1 d-flex justify-content-end align-items-end">
+                            <button type="button"
+                                    class="btn btn-sm btn-outline-danger btn-remove-variant">
+                                &times;
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | ADD IMAGE & VARIANT
+        |--------------------------------------------------------------------------
+        */
+        if (addImageBtn) {
+            addImageBtn.addEventListener('click', () => {
+                document.getElementById('image-wrapper').insertAdjacentHTML('beforeend', imageRowHTML());
+                updateSortOrders()
+            });
+        }
+
+        const addVariantBtn = document.getElementById('add-variant');
+        if (addVariantBtn) {
+            addVariantBtn.addEventListener('click', () => {
+                document.getElementById('variant-wrapper').insertAdjacentHTML('beforeend', variantRowHTML());
+                initAutoNumeric()
+                updateVariantColumns()
+                updateDecimalMode();
+            });
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | DYNAMIC IMAGE PREVIEW (UPLOAD MULTIPLE)
+        |--------------------------------------------------------------------------
+        */
+        document.addEventListener('change', (e) => {
+            const fileInput = e.target.closest('.image-file-input');
+            if (!fileInput) return;
+
+            const wrapper     = fileInput.closest('.image-item');
+            const preview     = wrapper.querySelector('.image-preview');
+            const placeholder = wrapper.querySelector('.image-preview-placeholder');
+            const file        = fileInput.files[0];
 
             if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
-                    preview.src = e.target.result;
+                reader.onload = (ev) => {
+                    preview.src = ev.target.result;
                     preview.classList.remove('d-none');
                     placeholder.classList.add('d-none');
                 };
@@ -618,272 +1063,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 placeholder.classList.remove('d-none');
             }
         });
-    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | PREVIEW VIDEO
-    |--------------------------------------------------------------------------
-    */
-    const videoInput = document.getElementById('video-input');
+        /*
+        |--------------------------------------------------------------------------
+        | REMOVE ACTIONS
+        |--------------------------------------------------------------------------
+        */
+        document.addEventListener('click', (e) => {
+            const removeVarBtn = e.target.closest('.btn-remove-variant');
+            if (removeVarBtn) {
+                removeVarBtn.closest('.variant-item').remove();
+                return;
+            }
 
-    if (videoInput) {
-        videoInput.addEventListener('change', function () {
-            const preview     = document.getElementById('video-preview');
-            const placeholder = document.getElementById('video-placeholder');
-            const file        = this.files[0];
+            const removeExistingBtn = e.target.closest('.btn-remove-existing-image');
+            if (removeExistingBtn) {
+                const row      = removeExistingBtn.closest('.image-item');
+                const checkbox = row.querySelector('.deleted-image-checkbox');
 
-            if (file && file.type.startsWith('video/')) {
-                preview.src = URL.createObjectURL(file);
-                preview.classList.remove('d-none');
-                placeholder.classList.add('d-none');
-            } else {
-                preview.src = '';
-                preview.classList.add('d-none');
-                placeholder.classList.remove('d-none');
+                checkbox.checked = true;
+                row.style.opacity = '0.5';
+                row.style.pointerEvents = 'none';
+
+                removeExistingBtn.disabled = true;
+                removeExistingBtn.textContent = 'Dihapus';
             }
         });
-    }
 
-    /*
-    |--------------------------------------------------------------------------
-    | FUNGSI: HITUNG ULANG URUTAN GAMBAR
-    |--------------------------------------------------------------------------
-    */
-    function updateSortOrders() {
-        // Ambil semua input urutan, baik gambar dari database (existing) maupun gambar baru
-        const sortInputs = document.querySelectorAll(
-            '#image-wrapper input[name="sort_order[]"], #image-wrapper input[name="existing_sort_orders[]"]'
-        );
-        
-        let currentIndex = 1; // Set urutan dimulai dari 1
-        
-        sortInputs.forEach(input => {
-            const item = input.closest('.image-item');
-            // Hanya hitung item yang TIDAK disembunyikan (tidak dihapus)
-            if (item && !item.classList.contains('d-none') && item.style.display !== 'none') {
-                input.value = currentIndex;
-                currentIndex++; // Tambah angka untuk elemen berikutnya
-            }
-        });
-    }
+        /*
+        |--------------------------------------------------------------------------
+        | SUBMIT LOADING
+        |--------------------------------------------------------------------------
+        */
+        const form = document.getElementById('product-form');
+        const submitBtn = document.getElementById('submit-btn');
 
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPLATE : IMAGE ROW
-    |--------------------------------------------------------------------------
-    */
-    function imageRowHTML() {
-        // Value input sort_order bisa dikosongkan karena akan otomatis diisi oleh updateSortOrders()
-        return `
-            <div class="border rounded p-3 mb-3 image-item">
-                <div class="row align-items-start g-3">
-                    <div class="col-md-2 d-flex align-items-center justify-content-center">
-                        <div class="image-preview-wrapper border rounded d-flex align-items-center justify-content-center bg-light"
-                            style="width:150px; height:100px; overflow:hidden;">
-                            <img class="image-preview d-none"
-                                style="width:100%; height:100%; object-fit:cover;"
-                                alt="Preview">
-                            <span class="image-preview-placeholder text-muted small text-center px-1">
-                                Tanpa Gambar
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-9">
-                        <div class="row g-2">
-                            <div class="col-12">
-                                <label class="form-label mb-1">Nama / Label Gambar</label>
-                                <input type="text" name="image_labels[]" class="form-control form-control-sm"
-                                    placeholder="Contoh: Tampak Depan, Detail, dll.">
-                            </div>
-                            <div class="col-md-8">
-                                <label class="form-label mb-1">File Gambar</label>
-                                <input type="file" name="images[]" class="form-control form-control-sm image-file-input"
-                                    accept="image/*">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label mb-1">Urutan</label>
-                                <input type="number" name="sort_order[]" min="1"
-                                    class="form-control form-control-sm">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-auto d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-image mt-4">
-                            &times; Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | EVENT LISTENERS (TAMBAH & HAPUS)
-    |--------------------------------------------------------------------------
-    */
-    const imageWrapper = document.getElementById('image-wrapper');
-    const addImageBtn = document.getElementById('add-image');
-
-    // 2. Saat tombol Hapus ditekan (Menggunakan Event Delegation)
-    if (imageWrapper) {
-        imageWrapper.addEventListener('click', function(e) {
-            
-            // Kasus A: Menghapus baris gambar BARU (langsung buang elemen dari HTML)
-            if (e.target.closest('.btn-remove-image')) {
-                e.target.closest('.image-item').remove();
-                updateSortOrders(); // Hitung ulang supaya angkanya merapat
-            }
-            
-            // Kasus B: Menghapus baris gambar EXISTING (sembunyikan elemen, centang checkbox delete)
-            if (e.target.closest('.btn-remove-existing-image')) {
-                const btn = e.target.closest('.btn-remove-existing-image');
-                const item = btn.closest('.image-item');
-                
-                // Cari checkbox hidden dan jadikan checked
-                const checkbox = item.querySelector('.deleted-image-checkbox');
-                if (checkbox) checkbox.checked = true;
-                
-                // Sembunyikan div-nya (jangan dihapus agar id tetap terkirim ke backend untuk proses delete DB)
-                item.classList.add('d-none');
-                
-                updateSortOrders(); // Hitung ulang supaya angkanya merapat mengabaikan yang tersembunyi
-            }
-        });
-    }
-
-    updateSortOrders();
-
-    /*
-    |--------------------------------------------------------------------------
-    | TEMPLATE : VARIANT ROW
-    |--------------------------------------------------------------------------
-    */
-    function variantRowHTML() {
-        const largeSelect = document.getElementById('large_unit_id');
-        const smallSelect = document.getElementById('small_unit_id');
-        let largeText = (largeSelect && largeSelect.selectedIndex > 0) ? largeSelect.options[largeSelect.selectedIndex].text : 'Satuan';
-        let smallText = (smallSelect && smallSelect.selectedIndex > 0) ? smallSelect.options[smallSelect.selectedIndex].text : 'Satuan Kecil';
-        
-        return `
-            <div class="border rounded p-3 mb-3 variant-item">
-                <div class="row g-2">
-                    <div class="col-md-5">
-                        <label>Nama Varian</label>
-                        <input type="text" name="size[]" class="form-control form-control-sm"
-                            placeholder="Contoh: Merah, XL, atau 500gr">
-                    </div>
-                    <div class="col-md-4">
-                        <label class="dynamic-qty-label fw-bold">Jumlah Per ${largeText} (${smallText})</label>
-                        <input type="number" name="box_qty[]" class="form-control form-control-sm">
-                    </div>
-                    <div class="col-md-3 d-flex justify-content-end align-items-end">
-                        <button type="button" class="btn btn-sm btn-outline-danger btn-remove-variant">
-                            &times; Hapus
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | ADD IMAGE & VARIANT
-    |--------------------------------------------------------------------------
-    */
-    if (addImageBtn) {
-        addImageBtn.addEventListener('click', () => {
-            document.getElementById('image-wrapper').insertAdjacentHTML('beforeend', imageRowHTML());
-            updateSortOrders()
-        });
-    }
-
-    const addVariantBtn = document.getElementById('add-variant');
-    if (addVariantBtn) {
-        addVariantBtn.addEventListener('click', () => {
-            document.getElementById('variant-wrapper').insertAdjacentHTML('beforeend', variantRowHTML());
-        });
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | DYNAMIC IMAGE PREVIEW (UPLOAD MULTIPLE)
-    |--------------------------------------------------------------------------
-    */
-    document.addEventListener('change', (e) => {
-        const fileInput = e.target.closest('.image-file-input');
-        if (!fileInput) return;
-
-        const wrapper     = fileInput.closest('.image-item');
-        const preview     = wrapper.querySelector('.image-preview');
-        const placeholder = wrapper.querySelector('.image-preview-placeholder');
-        const file        = fileInput.files[0];
-
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                preview.src = ev.target.result;
-                preview.classList.remove('d-none');
-                placeholder.classList.add('d-none');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            preview.classList.add('d-none');
-            placeholder.classList.remove('d-none');
+        if (form && submitBtn) {
+            form.addEventListener('submit', () => {
+                submitBtn.disabled = true;
+                submitBtn.querySelector('.btn-text').classList.add('d-none');
+                submitBtn.querySelector('.btn-loading').classList.remove('d-none');
+            });
         }
+
     });
-
-    /*
-    |--------------------------------------------------------------------------
-    | REMOVE ACTIONS
-    |--------------------------------------------------------------------------
-    */
-    document.addEventListener('click', (e) => {
-        const removeImgBtn = e.target.closest('.btn-remove-image');
-        if (removeImgBtn) {
-            removeImgBtn.closest('.image-item').remove();
-            return;
-        }
-
-        const removeVarBtn = e.target.closest('.btn-remove-variant');
-        if (removeVarBtn) {
-            removeVarBtn.closest('.variant-item').remove();
-            return;
-        }
-
-        const removeExistingBtn = e.target.closest('.btn-remove-existing-image');
-        if (removeExistingBtn) {
-            const row      = removeExistingBtn.closest('.image-item');
-            const checkbox = row.querySelector('.deleted-image-checkbox');
-
-            checkbox.checked = true;
-            row.style.opacity = '0.5';
-            row.style.pointerEvents = 'none';
-
-            removeExistingBtn.disabled = true;
-            removeExistingBtn.textContent = 'Dihapus';
-        }
-    });
-
-    /*
-    |--------------------------------------------------------------------------
-    | SUBMIT LOADING
-    |--------------------------------------------------------------------------
-    */
-    const form = document.getElementById('product-form');
-    const submitBtn = document.getElementById('submit-btn');
-
-    if (form && submitBtn) {
-        form.addEventListener('submit', () => {
-            submitBtn.disabled = true;
-            submitBtn.querySelector('.btn-text').classList.add('d-none');
-            submitBtn.querySelector('.btn-loading').classList.remove('d-none');
-        });
-    }
-
-});
 </script>
 @endsection

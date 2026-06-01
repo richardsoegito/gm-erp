@@ -144,14 +144,20 @@
                             <thead>
                                 <tr>
                                     <th>Ukuran / Size</th>
-                                    <th>Jumlah per {{ $product->largeUnit->name ?? '-' }} ({{ $product->smallUnit->name ?? '-' }})</th>
+                                    <th>Isi Colly</th>
+                                    @if ($product->smallUnit)
+                                        <th>Isi Pack / Box</th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($product->variants as $variant)
                                 <tr>
                                     <td>{{ $variant->size }}</td>
-                                    <td>{{ $variant->box_qty ? number_format($variant->box_qty, 0, ',', '.') : '-' }}</td>
+                                    <td>{{ $variant->large_unit_qty ? number_format($variant->large_unit_qty, 0, ',', '.') . ' ' . $product->largeUnit->name : '-' }}</td>
+                                    @if ($product->smallUnit)
+                                        <td>{{ $variant->small_unit_qty ? number_format($variant->small_unit_qty, 0, ',', '.') . ' ' . $product->smallUnit->name : '-' }}</td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>

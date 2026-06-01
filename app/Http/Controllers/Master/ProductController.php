@@ -703,8 +703,12 @@ class ProductController extends Controller
             'image_labels'     => 'nullable|array',
             'sort_order'       => 'nullable|array',
             'sort_order.*'     => 'nullable|integer|min:0',
-            'size'             => 'nullable|array',
-            'box_qty'          => 'nullable|array',
+            'size'            => 'nullable|array',
+            'size.*'          => 'nullable|string|max:100',
+            'large_qty'       => 'nullable|array',
+            'large_qty.*'     => 'nullable|numeric|min:0',
+            'small_qty'       => 'nullable|array',
+            'small_qty.*'     => 'nullable|numeric|min:0',
         ];
 
         $messages = [
@@ -754,8 +758,12 @@ class ProductController extends Controller
             'sort_order.array'          => 'Format data urutan gambar tidak valid.',
             'sort_order.*.integer'      => 'Urutan gambar harus berupa angka.',
             'sort_order.*.min'          => 'Urutan gambar tidak boleh kurang dari 0.',
-            'size.array'                => 'Format data ukuran varian tidak valid.',
-            'box_qty.array'             => 'Format data jumlah qty tidak valid.',
+            'size.*.string'             => 'Nama varian harus berupa teks.',
+            'size.*.max'                => 'Nama varian maksimal 100 karakter.',
+            'large_qty.*.numeric'       => 'Isi satuan besar harus berupa angka.',
+            'large_qty.*.min'           => 'Isi satuan besar tidak boleh kurang dari 0.',
+            'small_qty.*.numeric'       => 'Isi satuan kecil harus berupa angka.',
+            'small_qty.*.min'           => 'Isi satuan kecil tidak boleh kurang dari 0.',
         ];
 
         return $request->validate($rules, $messages);
@@ -787,45 +795,40 @@ class ProductController extends Controller
 
     private function syncVariants(Request $request, Product $product): void
     {
-        $variantIds = $request->input('variant_ids', []); // ID hidden input dari form
+        $variantIds = $request->input('variant_ids', []);
         $sizes      = $request->input('size', []);
-        $boxQtys    = $request->input('box_qty', []);
+        $largeQtys  = $request->input('large_qty', []);
+        $smallQtys  = $request->input('small_qty', []);
 
-        $keepVariantIds = []; // Array penampung ID yang akan dipertahankan
+        $keepIds = [];
 
-        foreach ($sizes as $idx => $size) {
-            $size = trim($size ?? '');
-            if ($size === '') {
-                continue; // skip baris kosong
+        foreach ($sizes as $index => $size) {
+
+            // Skip baris kosong
+            if (blank($size)) {
+                continue;
             }
 
-            $vId = $variantIds[$idx] ?? null;
-
-            if ($vId) {
-                // UPDATE VARIAN LAMA
-                $existingVariant = ProductVariant::where('id', $vId)
-                                                 ->where('product_id', $product->id)
-                                                 ->first();
-                if ($existingVariant) {
-                    $existingVariant->update([
-                        'size'    => $size,
-                        'box_qty' => $boxQtys[$idx] ?? null,
-                    ]);
-                    $keepVariantIds[] = $existingVariant->id;
-                }
-            } else {
-                // CREATE VARIAN BARU
-                $newVariant = ProductVariant::create([
+            $variant = ProductVariant::updateOrCreate(
+                [
+                    'id' => $variantIds[$index] ?? null,
+                ],
+                [
                     'product_id' => $product->id,
                     'size'       => $size,
-                    'box_qty'    => $boxQtys[$idx] ?? null,
-                ]);
-                $keepVariantIds[] = $newVariant->id;
-            }
+
+                    'large_unit_qty'  => $largeQtys[$index] ?? null,
+                    'small_unit_qty'  => $smallQtys[$index] ?? null,
+                ]
+            );
+
+            $keepIds[] = $variant->id;
         }
 
-        // Hapus varian lama yang tidak ada lagi di dalam form HTML
-        $product->variants()->whereNotIn('id', $keepVariantIds)->delete();
+        // Hapus variant yang sudah dibuang dari form
+        $product->variants()
+            ->whereNotIn('id', $keepIds)
+            ->delete();
     }
 
     /**
