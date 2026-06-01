@@ -229,7 +229,7 @@
                                 <div class="col-md-3 small-unit-column d-none">
                                     <label class="form-label fw-semibold mb-1">Isi Pack / Box</label>
                                     <div class="input-group input-group-sm flex-nowrap">
-                                        <input type="text" name="small_qty[]" class="form-control autonumeric-qty" value="{{ old('small_qty.0') }}">>
+                                        <input type="text" name="small_qty[]" class="form-control autonumeric-qty" value="{{ old('small_qty.0') }}">
                                         <span class="input-group-text small-unit-name bg-white text-secondary">Satuan</span>
                                     </div>
                                 </div>
