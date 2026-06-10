@@ -573,24 +573,73 @@ a {
     transition: transform 0.1s ease-out; 
 }
 
-.gallery-main video {
+.product-gallery {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
+    max-width: 100%;
+    min-width: 0; /* Sangat penting jika container parent-nya menggunakan flexbox */
+    overflow: hidden; /* Memastikan tidak ada yang tumpah ke kanan */
 }
 
+/* 2. Pastikan area gambar utama tidak bisa lebih lebar dari 100% */
+.gallery-main {
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    border-radius: 8px; /* Opsional, agar sudutnya manis */
+    overflow: hidden;
+}
+
+.gallery-main img, 
+.gallery-main video {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain; /* Menjaga proporsi gambar agar tidak gepeng */
+    display: block;
+}
+
+/* 2. Pengaturan Thumbnail dengan Scrollbar Terlihat */
 .gallery-thumbnails {
     display: flex;
+    flex-wrap: nowrap; /* Memaksa agar tetap 1 baris */
     gap: 10px;
-    overflow-x: auto;
-    padding-bottom: 5px;
+    overflow-x: auto; /* Mengaktifkan scroll */
+    overflow-y: hidden;
+    width: 100%;
+    padding-bottom: 12px; /* Memberi ruang di bawah agar scrollbar tidak menabrak gambar */
+    margin-top: 15px;
+    scroll-behavior: smooth;
+    
+    /* PENTING: Jangan gunakan scrollbar-width: none di sini agar scrollbar tetap muncul */
+    scrollbar-width: thin; /* Untuk Firefox: membuat scrollbar lebih tipis */
+    scrollbar-color: #c1c1c1 #f1f1f1; /* Untuk Firefox: warna thumb dan track */
 }
+
+/* 3. Mempercantik Scrollbar untuk Chrome, Safari, Edge */
+.gallery-thumbnails::-webkit-scrollbar {
+    height: 6px; /* Ketebalan garis scrollbar horizontal */
+}
+
+.gallery-thumbnails::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Warna latar belakang jalur scroll */
+    border-radius: 10px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-thumb {
+    background: #c1c1c1; /* Warna batang scrollnya */
+    border-radius: 10px;
+}
+
+.gallery-thumbnails::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8; /* Warna saat batang scroll disentuh/di-hover */
+}
+
 .thumb-item {
     min-width: 60px;
     width: 60px;
     height: 60px;
     border-radius: 8px;
     border: 2px solid transparent;
+    flex-shrink: 0;
     cursor: pointer;
     overflow: hidden;
     transition: all 0.2s;

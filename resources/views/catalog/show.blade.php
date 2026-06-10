@@ -85,21 +85,22 @@
                         @endif
                     </video>
                 </div>
-                
-                <div class="gallery-thumbnails">
+
+                {{-- Daftar Thumbnail (Kode bawaanmu) --}}
+                <div class="gallery-thumbnails" id="gallery-thumbs">
                     {{-- 1. Thumbnail Gambar Utama --}}
                     @if($product->thumbnail)
-                    <div class="thumb-item active" onclick="showImage('{{ asset('storage/' . $product->thumbnail) }}', this)">
-                        <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Thumbnail Utama">
-                    </div>
+                        <div class="thumb-item active" onclick="showImage('{{ asset('storage/' . $product->thumbnail) }}', this)">
+                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="Thumbnail Utama">
+                        </div>
                     @endif
                     
                     {{-- 2. Thumbnail Video --}}
                     @if($product->video)
-                    <div class="thumb-item" onclick="showVideo(this)" style="position: relative; display:flex; justify-content:center; align-items:center; background:#000;">
-                        <video src="{{ asset('storage/' . $product->video) }}" style="opacity: 0.5; object-fit: cover; width: 100%; height: 100%;"></video>
-                        <svg style="position: absolute; color: white;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
+                        <div class="thumb-item" onclick="showVideo(this)" style="position: relative; display:flex; justify-content:center; align-items:center; background:#000;">
+                            <video src="{{ asset('storage/' . $product->video) }}" style="opacity: 0.5; object-fit: cover; width: 100%; height: 100%;"></video>
+                            <svg style="position: absolute; color: white;" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                        </div>
                     @endif
 
                     {{-- 3. Kumpulan Relasi Images --}}
@@ -130,9 +131,6 @@
                     
                     <span class="meta-label">Satuan</span>
                     <span class="meta-value">{{ $product->largeUnit->name ?? '-' }}</span>
-                    
-                    <span class="meta-label">Satuan Kecil</span>
-                    <span class="meta-value">{{ $product->smallUnit->name ?? '-' }}</span>
                 </div>
 
                 {{-- Tabel Varian --}}
