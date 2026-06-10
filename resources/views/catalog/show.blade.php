@@ -144,7 +144,7 @@
                                     <th>Ukuran / Size</th>
                                     <th>Isi Colly</th>
                                     @if ($product->smallUnit)
-                                        <th>Isi Pack / Box</th>
+                                        <th>Isi Pack / Kotak</th>
                                     @endif
                                 </tr>
                             </thead>

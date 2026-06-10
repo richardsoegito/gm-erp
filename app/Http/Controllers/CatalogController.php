@@ -45,6 +45,23 @@ class CatalogController extends Controller
             $query->where('brand_id', $request->brand);
         }
 
+        // 4. Logika Sortir / Pengurutan
+        $sort = $request->query('sort', 'newest'); // 'newest' adalah default jika kosong
+
+        switch ($sort) {
+            case 'a-z':
+                $query->orderBy('name', 'asc');
+                break;
+            case 'z-a':
+                $query->orderBy('name', 'desc');
+                break;
+            case 'newest':
+            default:
+                // Urutkan berdasarkan data terbaru (ID terbesar atau created_at terbaru)
+                $query->latest(); 
+                break;
+        }
+
         // Ambil data dengan pagination dan pertahankan parameter URL (withQueryString)
         $products = $query->orderBy('name', 'asc')->paginate(12)->withQueryString();
 

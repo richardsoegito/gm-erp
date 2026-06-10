@@ -66,7 +66,7 @@
     <section class="filter-section" data-aos="fade-up" data-aos-delay="100">
         <div class="content">
             <div class="filter-card">
-                <form action="{{ route('catalog.index') }}" method="GET">
+                <form action="{{ route('catalog.index') }}" method="GET" id="filter-form">
                     <div class="filter-grid">
                         {{-- Search --}}
                         <div class="filter-search">
@@ -135,10 +135,22 @@
     {{-- Products Section --}}
     <section class="product-section">
         <div class="content">
-            {{-- Section Header --}}
-            <div class="section-heading" data-aos="fade-right" data-aos-delay="200">
-                <h2>Katalog Produk</h2>
-                {{-- <p class="section-subtitle">Koleksi terbaik dari Gunung Mas untuk Anda</p> --}}
+            {{-- Section Header & Sorting --}}
+            <div class="section-header-wrapper">
+                <div class="section-heading" data-aos="fade-right" data-aos-delay="200" style="margin-bottom: 0;">
+                    <h2>Katalog Produk</h2>
+                </div>
+
+                {{-- Dropdown Sortir dengan Tom Select --}}
+                <div class="sort-wrapper" data-aos="fade-left" data-aos-delay="200">
+                    <label for="sort-select" class="sort-label">Urutkan:</label>
+                    {{-- Pastikan atribut form="filter-form" tetap ada --}}
+                    <select name="sort" id="sort-select" form="filter-form">
+                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Paling Baru</option>
+                        <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A - Z</option>
+                        <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z - A</option>
+                    </select>
+                </div>
             </div>
 
             {{-- Product Grid --}}
@@ -236,6 +248,15 @@
                         }).catch(()=>{
                             callback();
                         });
+                }
+            });
+
+            new TomSelect("#sort-select", {
+                create: false,
+                controlInput: null,
+                dropdownParent: 'body', // KUNCI UTAMA: Memaksa dropdown keluar dari jebakan container
+                onChange: function(value) {
+                    document.getElementById('filter-form').submit();
                 }
             });
 
