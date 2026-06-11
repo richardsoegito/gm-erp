@@ -131,6 +131,11 @@
                     
                     <span class="meta-label">Satuan</span>
                     <span class="meta-value">{{ $product->largeUnit->name ?? '-' }}</span>
+
+                    @if ($product->colly_description)
+                        <span class="meta-label">Isian Colly</span>
+                        <span class="meta-value">{{ $product->colly_description }}</span>
+                    @endif
                 </div>
 
                 {{-- Tabel Varian --}}
