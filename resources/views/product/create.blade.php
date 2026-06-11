@@ -124,6 +124,11 @@
                         @enderror
                     </div>
 
+                    <div class="col-12 mb-3">
+                        <label for="colly_description">Keterangan Isian Colly</label>
+                        <input type="text" name="colly_description" id="colly_description" class="form-control  @error('colly_description') is-invalid @enderror" value="{{ $editing ? old('colly_description', $product->colly_description) : old('colly_description') }}" placeholder="1 Colly 10 Kotak">
+                    </div>
+
                     {{-- Deskripsi --}}
                     <div class="col-12 mb-3">
                         <label>Deskripsi</label>
