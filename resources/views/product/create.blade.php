@@ -957,57 +957,41 @@
         |--------------------------------------------------------------------------
         */
         function variantRowHTML() {
-            const largeSelect = document.getElementById('large_unit_id');
-            const smallSelect = document.getElementById('small_unit_id');
-
-            const largeText =
-                largeSelect && largeSelect.selectedIndex > 0
-                    ? largeSelect.options[largeSelect.selectedIndex].text
-                    : 'Colly';
-
-            const smallText =
-                smallSelect && smallSelect.selectedIndex > 0
-                    ? smallSelect.options[smallSelect.selectedIndex].text
-                    : '';
-
             return `
-                <div class="border rounded p-3 mb-3 variant-item">
-                    <div class="row g-2">
-
+                <div class="border rounded p-3 mb-3 variant-item bg-light">
+                    <div class="row g-3 align-items-end">
+                        
+                        {{-- HIDDEN INPUT KOSONG UNTUK VARIAN BARU --}}
                         <input type="hidden" name="variant_ids[]" value="">
 
-                        <div class="col-md-5">
-                            <label>Nama Varian</label>
-                            <input type="text"
-                                name="size[]"
-                                class="form-control form-control-sm">
+                        <div class="col-md-4 name-column">
+                            <label class="form-label fw-semibold mb-1">Nama Varian</label>
+                            <input type="text" name="size[]" class="form-control form-control-sm"
+                                placeholder="Contoh: Merah, XL, dll" value="{{ old('size.0') }}">
                         </div>
 
                         <div class="col-md-3 large-unit-column">
-                            <label class="large-unit-label fw-bold">
-                                Isi ${largeText}
-                            </label>
-                            <input type="text"
-                                name="large_qty[]"
-                                class="form-control form-control-sm autonumeric-qty">
+                            <label class="form-label fw-semibold mb-1">Isi Colly</label>
+                            <div class="input-group input-group-sm flex-nowrap">
+                                <input type="text" name="large_qty[]" class="form-control autonumeric-qty" value="{{ old('large_qty.0') }}">
+                                <span class="input-group-text large-unit-name bg-white text-secondary">Satuan</span>
+                            </div>
                         </div>
 
-                        <div class="col-md-3 small-unit-column ${smallText ? '' : 'd-none'}">
-                            <label class="small-unit-label fw-bold">
-                                Isi ${smallText}
-                            </label>
-                            <input type="text"
-                                name="small_qty[]"
-                                class="form-control form-control-sm autonumeric-qty">
+                        <div class="col-md-3 small-unit-column d-none">
+                            <label class="form-label fw-semibold mb-1">Isi Pack / Box</label>
+                            <div class="input-group input-group-sm flex-nowrap">
+                                <input type="text" name="small_qty[]" class="form-control autonumeric-qty" value="{{ old('small_qty.0') }}">
+                                <span class="input-group-text small-unit-name bg-white text-secondary">Satuan</span>
+                            </div>
                         </div>
 
-                        <div class="col-md-1 d-flex justify-content-end align-items-end">
-                            <button type="button"
-                                    class="btn btn-sm btn-outline-danger btn-remove-variant">
-                                &times;
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-sm btn-outline-danger w-100 btn-remove-variant">
+                                &times; Hapus
                             </button>
                         </div>
-
+                        
                     </div>
                 </div>
             `;
