@@ -467,6 +467,7 @@ class ProductController extends Controller
                 'status'           => $request->boolean('status'),
                 'meta_title'       => $validated['meta_title']       ?? null,
                 'meta_description' => $validated['meta_description'] ?? null,
+                'created_by'       => auth()->id(),
             ]);
 
             if ($request->hasFile('thumbnail')) {
@@ -511,6 +512,7 @@ class ProductController extends Controller
                 'status'           => $request->boolean('status'),
                 'meta_title'       => $validated['meta_title']       ?? null,
                 'meta_description' => $validated['meta_description'] ?? null,
+                'created_by'       => auth()->id() ?? null,
             ]);
 
             // ── Thumbnail ──────────────────────────────────────────────
