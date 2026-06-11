@@ -92,7 +92,7 @@
 
                     {{-- Satuan --}}
                     <div class="col-md-3 mb-3">
-                        <label>Satuan Besar<span class="text-danger">*</span></label>
+                        <label>Satuan<span class="text-danger">*</span></label>
                         <select name="large_unit_id" id="large_unit_id">
                             <option value="">Pilih Satuan</option>
                             @foreach ($units as $unit)
