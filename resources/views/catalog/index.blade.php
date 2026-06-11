@@ -158,7 +158,11 @@
                 @forelse ($products as $product)
                     <a href="{{ route('catalog.show', $product->slug) }}" class="product-card" data-aos="fade-up">
                         <div class="product-image-wrap">
-                            <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}">
+                            <img 
+                            src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : asset('images/no_image_available.jpg') }}"
+                            alt="{{ $product->name }}"
+                            id="thumbnail-img"
+                            onerror="this.src='{{ asset('images/no_image_available.jpg') }}'">
                         </div>
                         <div class="product-content">
                             <div class="product-meta">

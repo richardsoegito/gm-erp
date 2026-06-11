@@ -77,7 +77,11 @@
             {{-- Kiri: Galeri Media (Foto & Video) --}}
             <div class="product-gallery">
                 <div class="gallery-main" id="main-media-container" onmousemove="zoomImage(event)" onmouseleave="resetZoom()">
-                    <img src="{{ asset('storage/' . $product->thumbnail) }}" alt="{{ $product->name }}" id="main-image">
+                    <img 
+                    src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : asset('images/no_image_available.jpg') }}"
+                    alt="{{ $product->name }}"
+                    id="main-image"
+                    onerror="this.src='{{ asset('images/no_image_available.jpg') }}'">
                     
                     <video id="main-video" controls style="display: none; width: 100%; height: 100%;">
                         @if($product->video)
