@@ -881,6 +881,10 @@ a {
     box-sizing: border-box !important; 
 }
 
+.ts-dropdown.single {
+    z-index: 99999 !important;
+}
+
 /* Tambahan: Memberi sedikit jarak di atas/bawah list agar tidak mepet garis */
 .ts-dropdown .ts-dropdown-content {
     padding: 6px 0 !important;

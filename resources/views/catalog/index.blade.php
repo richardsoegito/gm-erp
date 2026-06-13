@@ -242,6 +242,7 @@
                 labelField: 'name',
                 searchField: 'name',
                 preload: 'focus',
+                dropdownParent: 'body',
                 load: function(query, callback) {
                     var url = "{{ route('catalog.search.brands') }}?q=" + encodeURIComponent(query);
                     
