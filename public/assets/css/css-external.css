@@ -111,6 +111,17 @@
     align-items: center;
 }
 
+/* Gaya dasar untuk tombol pagination agar angkanya tidak terpotong */
+.dt-pagination__nav button {
+    white-space: nowrap; /* PENTING: Mencegah angka turun ke baris baru */
+    min-width: 36px; /* Memberikan lebar minimum agar proporsional */
+    height: 36px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 8px;
+}
+
 /* Opsional: Styling tombol disable */
 .dt-pagination__nav button.is-disabled {
     opacity: 0.5;
@@ -118,18 +129,22 @@
     pointer-events: none;
 }
 
-/* Penyesuaian khusus layar mobile */
+/* Penyesuaian khusus layar mobile (HP) */
 @media (max-width: 576px) {
-    .dt-pagination {
-        display: flex;
-        flex-direction: column; /* Info teks di atas, tombol di bawah */
-        gap: 12px;
-        align-items: center;
-        text-align: center;
+    .dt-pagination__nav {
+        gap: 3px; /* Perkecil jarak antar tombol agar muat dalam 1 baris */
     }
     
     .dt-pagination__nav button {
-        padding: 4px 10px; /* Perkecil sedikit padding di mobile */
-        font-size: 14px;
+        min-width: 30px; /* Lebar tombol diperkecil */
+        height: 30px;    /* Tinggi tombol diperkecil */
+        padding: 0 4px;  /* Padding kiri-kanan dikurangi */
+        font-size: 13px; /* Ukuran font sedikit diperkecil */
+    }
+
+    /* Penyesuaian untuk elemen ellipsis (...) */
+    .dt-pagination__nav span {
+        padding: 0 2px !important; 
+        font-size: 13px;
     }
 }
