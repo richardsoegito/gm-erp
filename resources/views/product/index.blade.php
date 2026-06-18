@@ -208,24 +208,73 @@
         `;
 
         // PAGINATION
+        // PAGINATION (KODE BARU)
         nav.innerHTML = '';
-
         const pages = Math.ceil(total / state.perPage);
 
-        for (let i = 1; i <= pages; i++) {
+        // Jangan render pagination jika halaman tidak ada atau hanya 1 halaman
+        if (pages <= 1) return;
 
+        // Fungsi helper untuk membuat tombol
+        function createBtn(text, pageNum, isActive = false, isDisabled = false) {
             const btn = document.createElement('button');
-            btn.innerText = i;
+            btn.innerHTML = text;
+            
+            // Tambahkan class sesuai style Anda, misalnya 'btn', 'm-btn', dll
+            // btn.classList.add('m-btn'); 
 
-            if (i === state.page) btn.classList.add('is-active');
-
-            btn.onclick = () => {
-                state.page = i;
-                render();
-            };
-
-            nav.appendChild(btn);
+            if (isActive) btn.classList.add('is-active');
+            
+            if (isDisabled) {
+                btn.disabled = true;
+                btn.classList.add('is-disabled'); // Class untuk efek disable
+            } else if (pageNum !== null) {
+                btn.onclick = () => {
+                    state.page = pageNum;
+                    render();
+                };
+            }
+            return btn;
         }
+
+        // Tombol Previous
+        nav.appendChild(createBtn('&laquo;', state.page - 1, false, state.page === 1));
+
+        // Logika Smart Pagination (Sliding Window)
+        let paginationItems = [];
+        
+        if (pages <= 7) {
+            // Jika halaman sedikit, tampilkan semua
+            for (let i = 1; i <= pages; i++) {
+                paginationItems.push(i);
+            }
+        } else {
+            // Jika halaman banyak, gunakan ellipsis (...)
+            if (state.page <= 4) {
+                paginationItems = [1, 2, 3, 4, 5, '...', pages];
+            } else if (state.page >= pages - 3) {
+                paginationItems = [1, '...', pages - 4, pages - 3, pages - 2, pages - 1, pages];
+            } else {
+                paginationItems = [1, '...', state.page - 1, state.page, state.page + 1, '...', pages];
+            }
+        }
+
+        // Render angka dan ellipsis
+        paginationItems.forEach(item => {
+            if (item === '...') {
+                const span = document.createElement('span');
+                span.innerText = '...';
+                span.style.padding = '0 8px';
+                span.style.display = 'flex';
+                span.style.alignItems = 'flex-end';
+                nav.appendChild(span);
+            } else {
+                nav.appendChild(createBtn(item, item, item === state.page));
+            }
+        });
+
+        // Tombol Next
+        nav.appendChild(createBtn('&raquo;', state.page + 1, false, state.page === pages));
     }
 
     // SEARCH

@@ -101,3 +101,35 @@
 #dt-table tbody tr:hover {
     background: rgba(66, 114, 215, 0.04);
 }
+
+/* Pastikan container pagination menggunakan flex-wrap */
+.dt-pagination__nav {
+    display: flex;
+    flex-wrap: wrap; /* Penting: agar tombol turun ke bawah jika layar sempit */
+    gap: 4px;
+    justify-content: center; /* Posisikan ke tengah / kanan sesuai selera */
+    align-items: center;
+}
+
+/* Opsional: Styling tombol disable */
+.dt-pagination__nav button.is-disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Penyesuaian khusus layar mobile */
+@media (max-width: 576px) {
+    .dt-pagination {
+        display: flex;
+        flex-direction: column; /* Info teks di atas, tombol di bawah */
+        gap: 12px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .dt-pagination__nav button {
+        padding: 4px 10px; /* Perkecil sedikit padding di mobile */
+        font-size: 14px;
+    }
+}
