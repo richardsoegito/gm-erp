@@ -143,10 +143,10 @@
                 </div>
 
                 {{-- Tabel Varian --}}
-                <div class="variant-section">
-                    <h3>Varian Produk</h3>
-                    
-                    @if($product->variants && $product->variants->count() > 0)
+                @if($product->variants && $product->variants->count() > 0)
+                    <div class="variant-section">
+                        <h3>Varian Produk</h3>
+                        
                         <table class="table-variants">
                             <thead>
                                 <tr>
@@ -169,13 +169,8 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    @else
-                        {{-- Keterangan jika tidak ada varian --}}
-                        <p style="color: var(--text-muted); font-size: 0.95rem; font-style: italic; margin-bottom: 25px;">
-                            Tidak ada varian untuk produk ini.
-                        </p>
-                    @endif
-                </div>
+                    </div>
+                @endif
 
                 {{-- Deskripsi Produk --}}
                 @if ($product->description)
