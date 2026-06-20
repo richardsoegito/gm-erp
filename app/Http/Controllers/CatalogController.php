@@ -78,11 +78,9 @@ class CatalogController extends Controller
             ->with(['brand', 'category', 'variants', 'images'])
             ->where('status', true);
 
-        // ... (Filter Pencarian, Kategori, Brand, Sortir TETAP SAMA seperti kode Anda) ...
         // 1. Filter Pencarian Global (Search)
         if ($request->filled('search')) {
-            $search = $request->search; // Definisikan di sini khusus scope ini
-
+            $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
                 ->orWhereHas('brand', function ($brand) use ($search) {
@@ -96,44 +94,58 @@ class CatalogController extends Controller
 
         // 2. Filter Kategori
         if ($request->filled('category')) {
-            // Karena TomSelect mengirimkan 'id', langsung tembak foreign key-nya
-            // Pastikan nama kolom disesuaikan, misalnya 'category_id'
             $query->where('category_id', $request->category); 
         }
 
         // 3. Filter Brand
         if ($request->filled('brand')) {
-            // HARUS pakai ->where() agar tidak merusak filter status=true
-            // Sama seperti kategori, langsung tembak foreign key-nya
             $query->where('brand_id', $request->brand);
         }
 
         // 4. Logika Sortir / Pengurutan
-        $sort = $request->query('sort', 'newest'); // 'newest' adalah default jika kosong
-
+        $sort = $request->query('sort', 'newest');
         switch ($sort) {
-            case 'a-z':
+            Case 'a-z':
                 $query->orderBy('name', 'asc');
-                break;
-            case 'z-a':
+                Break;
+            Case 'z-a':
                 $query->orderBy('name', 'desc');
-                break;
-            case 'newest':
-            default:
-                // Urutkan berdasarkan data terbaru (ID terbesar atau created_at terbaru)
+                Break;
+            Case 'newest':
+            Default:
                 $query->latest(); 
-                break;
+                Break;
         }
 
-        // Ubah jadi 20 sesuai permintaan
-        $products = $query->paginate(20)->withQueryString();
+        // =================================================================
+        // AMBIL NILAI PER PAGE (Baru)
+        // =================================================================
+        // Mengambil input 'per_page', jika tidak ada/kosong, default ke 20.
+        // Ditambahkan validasi in_array untuk memastikan user tidak memasukkan angka aneh via URL.
+        // 1. Cek apakah ada request per_page baru dari form/dropdown
+        if ($request->filled('per_page')) {
+            $perPage = $request->query('per_page');
+            // Validasi input
+            if (in_array($perPage, [20, 60, 100])) {
+                // Simpan ke session supaya server ingat pilihan terakhir user
+                session(['catalog_per_page' => $perPage]);
+            }
+        }
+
+        // 2. Ambil dari session, kalau session kosong pakai default 20
+        $perPage = session('catalog_per_page', 20);
+
+        // Masukkan variabel $perPage ke dalam fungsi paginate seperti biasa
+        $products = $query->paginate($perPage)->withQueryString();
+
+        // =================================================================
 
         // JIKA REQUEST BERASAL DARI TOMBOL LOAD MORE (AJAX)
         if ($request->ajax()) {
             $view = view('catalog.partials.product_list', compact('products'))->render();
             return response()->json([
                 'html' => $view,
-                'next_page_url' => $products->nextPageUrl() // Ambil URL halaman berikutnya
+                'next_page_url' => $products->nextPageUrl()
             ]);
         }
 

@@ -136,20 +136,36 @@
     <section class="product-section">
         <div class="content">
             {{-- Section Header & Sorting --}}
-            <div class="section-header-wrapper">
+            <div class="section-header-wrapper d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                 <div class="section-heading" data-aos="fade-right" data-aos-delay="200" style="margin-bottom: 0;">
                     <h2>Katalog Produk</h2>
                 </div>
 
-                {{-- Dropdown Sortir dengan Tom Select --}}
-                <div class="sort-wrapper" data-aos="fade-left" data-aos-delay="200">
-                    <label for="sort-select" class="sort-label">Urutkan:</label>
-                    {{-- Pastikan atribut form="filter-form" tetap ada --}}
-                    <select name="sort" id="sort-select" form="filter-form">
-                        <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Paling Baru</option>
-                        <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A - Z</option>
-                        <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z - A</option>
-                    </select>
+                {{-- Kontainer Dropdown Filter Kanan --}}
+                <div class="d-flex align-items-center gap-3" data-aos="fade-left" data-aos-delay="200">
+                    {{-- Grup Tampilkan --}}
+                    <div class="d-flex flex-column text-start" style="min-width: 100px;">
+                        <label for="per-page-select" class="sort-label mb-1" style="font-size: 0.85rem; font-weight: 500; opacity: 0.8;">Tampilkan:</label>
+                        <div class="per-page-wrapper w-100">
+                            <select name="per_page" id="per-page-select" form="filter-form">
+                                <option value="20" {{ session('catalog_per_page', 20) == '20' ? 'selected' : '' }}>20</option>
+                                <option value="60" {{ session('catalog_per_page') == '60' ? 'selected' : '' }}>60</option>
+                                <option value="100" {{ session('catalog_per_page') == '100' ? 'selected' : '' }}>100</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    {{-- Grup Urutkan --}}
+                    <div class="d-flex flex-column text-start" style="min-width: 160px;">
+                        <label for="sort-select" class="sort-label mb-1" style="font-size: 0.85rem; font-weight: 500; opacity: 0.8;">Urutkan:</label>
+                        <div class="sort-wrapper w-100">
+                            <select name="sort" id="sort-select" form="filter-form">
+                                <option value="newest" {{ request('sort') == 'newest' ? 'selected' : '' }}>Paling Baru</option>
+                                <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>Nama A - Z</option>
+                                <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Nama Z - A</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -248,6 +264,15 @@
                 create: false,
                 controlInput: null,
                 dropdownParent: 'body', // KUNCI UTAMA: Memaksa dropdown keluar dari jebakan container
+                onChange: function(value) {
+                    document.getElementById('filter-form').submit();
+                }
+            });
+
+            new TomSelect("#per-page-select", {
+                create: false,
+                controlInput: null,
+                dropdownParent: 'body',
                 onChange: function(value) {
                     document.getElementById('filter-form').submit();
                 }
