@@ -241,7 +241,17 @@
         }
 
         // --- Logika Zoom ---
+        // Fungsi untuk mendeteksi apakah pengguna menggunakan perangkat layar sentuh
+        function isTouchDevice() {
+            return window.matchMedia("(pointer: coarse)").matches || 
+                   'ontouchstart' in window || 
+                   navigator.maxTouchPoints > 0;
+        }
+
         function zoomImage(e) {
+            // Jika perangkat adalah layar sentuh (mobile/tab), batalkan fungsi zoom
+            if (isTouchDevice()) return;
+
             if (mainImage.style.display === 'none') return;
 
             const container = document.getElementById('main-media-container');
@@ -251,10 +261,13 @@
             const y = ((e.clientY - rect.top) / rect.height) * 100;
 
             mainImage.style.transformOrigin = `${x}% ${y}%`;
-            mainImage.style.transform = 'scale(2)';
+            mainImage.style.transform = 'scale(2)'; // Nilai zoom bisa disesuaikan
         }
 
         function resetZoom() {
+            // Jika perangkat adalah layar sentuh, tidak perlu melakukan reset zoom karena zoom tidak terjadi
+            if (isTouchDevice()) return;
+
             mainImage.style.transformOrigin = 'center center';
             mainImage.style.transform = 'scale(1)';
         }
