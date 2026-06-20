@@ -432,28 +432,68 @@ a {
 
 .product-meta {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 10px;
     font-size: 0.8rem;
     font-weight: 500;
 }
 
-.product-category {
+/* .product-category {
     color: var(--primary);
     background: rgba(37, 99, 235, 0.1);
-    padding: 3px 8px;
-    border-radius: 6px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: normal;
+    overflow: visible;
+    max-width: 60%;
     transition: all 0.3s ease-in-out;
-}
+} */
 
 [data-bs-theme="dark"] .product-category {
     background: rgba(59, 130, 246, 0.2);
 }
 
-.product-brand {
+/* .product-brand {
     color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    text-align: right;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 35%;
     transition: all 0.3s ease-in-out;
+} */
+
+/* Tampilan Default (Mobile) */
+.product-category {
+    display: none; /* Kategori disembunyikan di HP */
+}
+
+.product-brand {
+    display: inline-block; /* Brand tetap tampil */
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+/* Tampilan untuk Tablet ke atas (layar >= 768px) */
+@media (min-width: 768px) {
+    .product-category {
+        display: inline-block; /* Kategori muncul di layar lebar */
+        background-color: #E6E6FA;
+        color: #4169E1;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+    }
 }
 
 .product-title {

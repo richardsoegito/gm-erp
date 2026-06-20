@@ -6,7 +6,7 @@
 
 <div class="row">
     <div class="card">
-        <div class="card-header d-flex align-items-center justify-content-between">
+        <div class="card-header d-flex align-items-md-center align-items-start justify-content-md-between justify-content-start flex-md-row flex-column gap-3">
             <div>Daftar Produk</div>
 
             <a href="{{ route('master.product.create') }}" class="btn btn-primary">

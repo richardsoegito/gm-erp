@@ -154,37 +154,25 @@
             </div>
 
             {{-- Product Grid --}}
-            <div class="product-grid">
-                @forelse ($products as $product)
-                    <a href="{{ route('catalog.show', $product->slug) }}" class="product-card" data-aos="fade-up">
-                        <div class="product-image-wrap">
-                            <img 
-                            src="{{ $product->thumbnail ? asset('storage/' . $product->thumbnail) : asset('images/no_image_available.jpg') }}"
-                            alt="{{ $product->name }}"
-                            id="thumbnail-img"
-                            onerror="this.src='{{ asset('images/no_image_available.jpg') }}'">
-                        </div>
-                        <div class="product-content">
-                            <div class="product-meta">
-                                <span class="product-category">{{ $product->category->name ?? 'Tanpa Kategori' }}</span>
-                                <span class="product-brand">{{ $product->brand->name ?? '-' }}</span>
-                            </div>
-                            <h3 class="product-title">{{ $product->name }}</h3>
-                        </div>
-                    </a>
-                @empty
+            <div class="product-grid" id="product-grid">
+                @if($products->isEmpty())
                     <div class="col-12 text-center">
                         <p>Produk tidak ditemukan.</p>
                     </div>
-                @endforelse
+                @else
+                    {{-- Panggil partial view untuk load pertama kali --}}
+                    @include('catalog.partials.product_list', ['products' => $products])
+                @endif
             </div>
 
-            {{-- Pagination Links --}}
-            <div class="pagination-wrapper" data-aos="fade-up">
-                {{ $products->links('pagination::bootstrap-5') }}
-            </div>
-
-            {{-- Pagination --}}
+            {{-- Tombol Load More sebagai pengganti Pagination Link --}}
+            @if($products->hasMorePages())
+                <div class="text-center mt-4 mb-5" data-aos="fade-up">
+                    <button id="btn-load-more" class="search-btn" data-url="{{ $products->nextPageUrl() }}">
+                        Load More (Tampilkan Lebih Banyak)
+                    </button>
+                </div>
+            @endif
         </div>
     </section>
 
@@ -265,6 +253,49 @@
                 }
             });
 
+            const btnLoadMore = document.getElementById('btn-load-more');
+            const productGrid = document.getElementById('product-grid');
+
+            if (btnLoadMore) {
+                btnLoadMore.addEventListener('click', function() {
+                    let url = this.getAttribute('data-url');
+                    if (!url) return;
+
+                    // Ubah teks tombol dan matikan sementara agar tidak di-klik ganda
+                    let originalText = this.innerText;
+                    this.innerText = 'Loading...';
+                    this.disabled = true;
+
+                    fetch(url, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest' // Penting agar Laravel tahu ini AJAX
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Tambahkan elemen HTML baru ke dalam grid
+                        productGrid.insertAdjacentHTML('beforeend', data.html);
+
+                        // Perbarui URL untuk klik selanjutnya
+                        if (data.next_page_url) {
+                            btnLoadMore.setAttribute('data-url', data.next_page_url);
+                            btnLoadMore.innerText = originalText;
+                            btnLoadMore.disabled = false;
+                        } else {
+                            // Jika data sudah habis, sembunyikan tombol
+                            btnLoadMore.style.display = 'none';
+                        }
+
+                        // Refresh AOS animation untuk item baru yang masuk
+                        AOS.refresh();
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        btnLoadMore.innerText = originalText;
+                        btnLoadMore.disabled = false;
+                    });
+                });
+            }
         });
     </script>
 </body>
