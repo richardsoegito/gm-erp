@@ -139,6 +139,12 @@
             <div class="section-header-wrapper d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
                 <div class="section-heading" data-aos="fade-right" data-aos-delay="200" style="margin-bottom: 0;">
                     <h2>Katalog Produk</h2>
+                    {{-- Teks Informasi Jumlah Produk --}}
+                    @if(isset($products) && !$products->isEmpty())
+                        <p style="font-size: 0.9rem; margin-top: 4px; opacity: 0.8; margin-bottom: 0;">
+                            Menampilkan <strong id="current-showing">{{ $products->count() }}</strong> dari <strong>{{ $products->total() }}</strong> produk
+                        </p>
+                    @endif
                 </div>
 
                 {{-- Kontainer Dropdown Filter Kanan --}}
@@ -300,6 +306,14 @@
                     .then(data => {
                         // Tambahkan elemen HTML baru ke dalam grid
                         productGrid.insertAdjacentHTML('beforeend', data.html);
+
+                        // -- KODE TAMBAHAN UNTUK UPDATE JUMLAH PRODUK --
+                        const currentShowing = document.getElementById('current-showing');
+                        if (currentShowing) {
+                            // Menghitung jumlah elemen/card produk langsung di dalam grid
+                            currentShowing.innerText = productGrid.children.length; 
+                        }
+                        // ----------------------------------------------
 
                         // Perbarui URL untuk klik selanjutnya
                         if (data.next_page_url) {
